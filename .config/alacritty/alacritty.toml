@@ -1,0 +1,22 @@
+# Police d'écriture patchée
+
+[general]
+import = [
+  "~/.config/alacritty/themes/catppuccin-mocha.toml"
+]
+
+[font]
+size = 12.0
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[window]
+opacity = 0.90
+blur = true
+padding = { x = 12, y = 12 }

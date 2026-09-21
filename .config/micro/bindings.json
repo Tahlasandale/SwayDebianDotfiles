@@ -1,0 +1,13 @@
+{
+    "F2": "command:tree",
+    "F5": "command:wc",
+    "Alt-o": "command:fzf",
+    "Alt-k": "command:lsp hover",
+    "Alt-d": "command:lsp goto-definition",
+    "Alt-t": "command:lsp goto-typedefinition",
+    "Alt-r": "command:lsp find-references",
+    "Alt-n": "command:lsp rename",
+    "Alt-s": "command:lsp document-symbols",
+    "Alt-l": "command:lsp format",
+    "CtrlSpace": "command:lsp autocomplete"
+}

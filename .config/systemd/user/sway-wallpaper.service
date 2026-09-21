@@ -1,0 +1,7 @@
+[Unit]
+Description=Rotation wallpaper Sway (30 min)
+ConditionEnvironment=SWAYSOCK
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/sway-next-wallpaper.sh

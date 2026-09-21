@@ -1,0 +1,4 @@
+{
+    "colorscheme": "catppuccin-mocha-transparent",
+    "statusformatl": "$(filename) $(modified)($(line),$(col)) | ft:$(opt:filetype) | $(mlsp.status)"
+}

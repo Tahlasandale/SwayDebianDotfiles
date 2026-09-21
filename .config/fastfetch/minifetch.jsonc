@@ -1,0 +1,68 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "none"
+  },
+  "display": {
+    "separator": " \u001b[38;2;203;166;247m\uf178\u001b[0m ",
+    "constants": [
+      "\u001b[38;2;245;194;231m\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u001b[0m",
+    ],
+    "key": {
+      "type": "icon",
+      "paddingLeft": 2,
+    },
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;242;205;205m\u250c\u001b[0m{$1} \u001b[38;2;203;166;247mSystem Info\u001b[0m {$1}\u001b[38;2;242;205;205m\u2510\u001b[0m",
+    },
+    {
+      "type": "custom",
+      "format": "  \ue77d \u001b[38;2;203;166;247m\uf178\u001b[0m GNU/Linux",
+    },
+    {
+      "type": "title",
+    },
+    {
+      "type": "os",
+      "keyColor": "\u001b[38;2;245;194;231m",
+    },
+    {
+      "type": "kernel",
+      "keyColor": "\u001b[38;2;245;194;231m",
+    },
+    {
+      "type": "uptime",
+      "keyColor": "\u001b[38;2;245;194;231m",
+    },
+    {
+      "type": "command",
+      "key": " Boot",
+      "keyColor": "\u001b[38;2;245;194;231m",
+      "text": "~/.local/bin/boot-info.sh",
+    },
+    {
+      "type": "packages",
+      "keyColor": "\u001b[38;2;245;194;231m",
+    },
+    {
+      "type": "memory",
+      "keyColor": "\u001b[38;2;245;194;231m",
+    },
+    {
+      "type": "custom",
+      "format": "",
+    },
+    {
+      "type": "colors",
+      "symbol": "circle",
+      "paddingLeft": 17,
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;242;205;205m\u2514\u001b[0m{$1}\u001b[38;2;242;205;205m\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u001b[0m{$1}\u001b[38;2;242;205;205m\u2518\u001b[0m",
+    },
+  ],
+}
