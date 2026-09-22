@@ -6,7 +6,7 @@ set -u
 GIT="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 $GIT add -f \
-  ~/.config/sway/config ~/.config/sway/catppuccin-mocha \
+  ~/.config/sway/config ~/.config/sway/catppuccin-mocha ~/.config/sway/wrapper.sh \
   ~/.config/waybar/config ~/.config/waybar/style.css ~/.config/waybar/mocha.css \
   ~/.config/tofi/config \
   ~/.config/swaylock/config \
@@ -20,8 +20,9 @@ $GIT add -f \
   ~/.config/oh-my-posh/catppuccin.omp.json \
   ~/.config/alacritty/alacritty.toml ~/.config/alacritty/themes \
   ~/.config/systemd/user/sway-wallpaper.service ~/.config/systemd/user/sway-wallpaper.timer \
+  ~/.config/systemd/user/timers.target.wants/sway-wallpaper.timer \
   ~/.config/systemd/user/waybar.service ~/.config/systemd/user/mako.service ~/.config/systemd/user/foot-server.service ~/.config/systemd/user/foot-server.socket \
-  ~/.bashrc ~/.bash_aliases ~/.tmux.conf \
+  ~/.bashrc ~/.bash_aliases ~/.tmux.conf ~/.profile \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \
   ~/.local/bin/sway-cycle-workspace.sh \
   ~/.local/bin/dotfiles-commit.sh
