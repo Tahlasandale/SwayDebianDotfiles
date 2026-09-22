@@ -11,6 +11,7 @@ $GIT add -f \
   ~/.config/sway/config ~/.config/sway/catppuccin-mocha ~/.config/sway/wrapper.sh \
   ~/.config/waybar/config ~/.config/waybar/style.css ~/.config/waybar/mocha.css \
   ~/.config/tofi/config \
+  ~/.config/mako/config \
   ~/.config/swaylock/config \
   ~/.config/foot/foot.ini \
   ~/.config/fastfetch/config.jsonc ~/.config/fastfetch/minifetch.jsonc ~/.config/fastfetch/logo \

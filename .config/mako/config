@@ -1,0 +1,22 @@
+# mako — Catppuccin Mocha officiel (variante mauve) + réglages rice (BISON)
+
+# --- Réglages globaux ---
+font=JetBrainsMono Nerd Font 11
+width=350
+border-size=2
+border-radius=12
+icons=1
+max-visible=3
+default-timeout=5000
+layer=overlay
+anchor=top-right
+
+# --- Theme officiel catppuccin/mako ---
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#cba6f7
+progress-color=over #313244
+
+# --- Criteria (toujours a la fin) ---
+[urgency=high]
+border-color=#fab387

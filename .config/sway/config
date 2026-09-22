@@ -49,6 +49,7 @@ exec ~/.local/bin/sway-next-wallpaper.sh
 
 # Verr Maj actif par defaut (touche utilisable pour deverrouiller)
 exec sh -c 'sleep 2; wtype -k Caps_Lock'
+exec mako
 
 # Waybar en overlay flottant (standalone, Sway ne reserve aucun espace)
 exec waybar
