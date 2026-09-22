@@ -24,10 +24,13 @@ $GIT add -f \
   ~/.config/alacritty/alacritty.toml ~/.config/alacritty/themes \
   ~/.config/systemd/user/sway-wallpaper.service ~/.config/systemd/user/sway-wallpaper.timer \
   ~/.config/systemd/user/timers.target.wants/sway-wallpaper.timer \
+  ~/.config/systemd/user/battery-alert.service ~/.config/systemd/user/battery-alert.timer \
+  ~/.config/systemd/user/timers.target.wants/battery-alert.timer \
   ~/.config/systemd/user/waybar.service ~/.config/systemd/user/mako.service ~/.config/systemd/user/foot-server.service ~/.config/systemd/user/foot-server.socket \
   ~/.bashrc ~/.bash_aliases ~/.tmux.conf ~/.profile \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \
   ~/.local/bin/sway-cycle-workspace.sh \
+  ~/.local/bin/battery-alert.sh \
   ~/.local/bin/dotfiles-commit.sh
 
 # Garde-fou secrets : abort si l'index contient un chemin sensible

@@ -1,0 +1,6 @@
+[Unit]
+Description=Alerte batterie basse (notif mako)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/battery-alert.sh
