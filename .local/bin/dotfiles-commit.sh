@@ -2,6 +2,8 @@
 # dotfiles-commit.sh ["message"] — commit "correct" du bare repo ~/.dotfiles :
 # ajoute SEULEMENT la liste curee, refuse tout secret, commit + push.
 # Usage : dotfiles-commit.sh "bordures sway 5px"
+# Workflow : plan -> build -> test (utilisateur) -> commit auto si "valide".
+# Aucun commit sans validation explicite.
 set -u
 GIT="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
