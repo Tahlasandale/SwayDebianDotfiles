@@ -27,9 +27,11 @@ input * {
     xkb_layout "fr"
 }
 
-# Trackpad ELAN : scroll naturel (2 doigts)
+# Trackpad ELAN : scroll naturel (2 doigts), tap = clic, 2 doigts = clic droit
 input type:touchpad {
     natural_scroll enabled
+    tap enabled
+    click_method clickfinger
 }
 
 # Inclure les configurations par défaut de Debian (raccourcis médias, polkit, etc.)
@@ -64,11 +66,14 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'Voulez-vous quitter Sway ?' -B 
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
-bindsym $mod+$right focus right
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
+
+# Changement de bureau circulaire (1-2-3-4-5-1) au clavier
+bindsym Control+$mod+Left exec ~/.local/bin/sway-cycle-workspace.sh prev
+bindsym Control+$mod+Right exec ~/.local/bin/sway-cycle-workspace.sh next
 
 # Déplacer la fenêtre active
 bindsym $mod+Shift+$left move left
@@ -86,6 +91,10 @@ bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
 bindsym $mod+4 workspace number 4
 bindsym $mod+5 workspace number 5
+
+# Gestures trackpad : 3 doigts = bureau circulaire
+bindgesture swipe:3:left exec ~/.local/bin/sway-cycle-workspace.sh next
+bindgesture swipe:3:right exec ~/.local/bin/sway-cycle-workspace.sh prev
 # Doublons pave numerique (KP_1..KP_5, Verr Num actif)
 bindsym $mod+KP_1 workspace number 1
 bindsym $mod+KP_2 workspace number 2
@@ -112,4 +121,11 @@ bindsym $mod+f fullscreen toggle
 bindsym $mod+Shift+space floating toggle
 
 # Recharger la configuration
+
 bindsym $mod+Shift+r reload
+
+# Syncthing : DOIT rester le tout dernier exec du fichier,
+# afin de demarrer en derniere priorite apres tout l'environnement
+# (env dbus/systemd, papier peint, caps lock, waybar).
+# Ne rien ajouter apres cette ligne.
+exec sh -c 'sleep 3; ~/.local/bin/syncthing serve'

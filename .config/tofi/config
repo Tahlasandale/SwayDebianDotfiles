@@ -2,11 +2,11 @@
 
 # --- Palette Catppuccin Mocha ---
 text-color = #cdd6f4
-prompt-color = #f38ba8
-selection-color = #f9e2af
+prompt-color = #cba6f7
+selection-color = #cba6f7
 background-color = #1e1e2eE6
 selection-background = #45475a
-border-color = #f38ba8
+border-color = #cba6f7
 
 # --- Police + dimensions ---
 font = JetBrainsMono Nerd Font
@@ -14,7 +14,7 @@ font-size = 12
 width = 40%
 height = 40%
 corner-radius = 12
-border-width = 1
+border-width = 3
 
 # --- Comportement applis ---
 prompt-text = "run: "

@@ -125,6 +125,7 @@ button:hover {
 #temperature,
 #backlight,
 #battery,
+#keyboard-state,
 #clock,
 #custom-power {
     min-width: 12px;
@@ -136,6 +137,16 @@ button:hover {
 #mode {
     background-color: @red;
     color: @crust;
+    border-radius: 8px;
+}
+
+#keyboard-state {
+    color: @mauve;
+}
+
+#keyboard-state.locked {
+    color: @crust;
+    background-color: @mauve;
     border-radius: 8px;
 }
 

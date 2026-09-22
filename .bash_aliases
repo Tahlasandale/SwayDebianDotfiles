@@ -9,3 +9,6 @@ alias lt='eza --tree --level=2 --icons=auto --group-directories-first'
 
 # bat (remplace cat) avec theme Catppuccin Mocha
 alias cat='bat --paging=never'
+
+# clear = effacer + resume systeme
+alias clear='clear && minifetch'

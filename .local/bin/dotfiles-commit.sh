@@ -9,6 +9,7 @@ $GIT add -f \
   ~/.config/sway/config ~/.config/sway/catppuccin-mocha \
   ~/.config/waybar/config ~/.config/waybar/style.css ~/.config/waybar/mocha.css \
   ~/.config/tofi/config \
+  ~/.config/swaylock/config \
   ~/.config/foot/foot.ini \
   ~/.config/fastfetch/config.jsonc ~/.config/fastfetch/minifetch.jsonc ~/.config/fastfetch/logo \
   ~/.config/eza/theme.yml \
@@ -22,6 +23,7 @@ $GIT add -f \
   ~/.config/systemd/user/waybar.service ~/.config/systemd/user/mako.service ~/.config/systemd/user/foot-server.service ~/.config/systemd/user/foot-server.socket \
   ~/.bashrc ~/.bash_aliases ~/.tmux.conf \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \
+  ~/.local/bin/sway-cycle-workspace.sh \
   ~/.local/bin/dotfiles-commit.sh
 
 # Garde-fou secrets : abort si l'index contient un chemin sensible

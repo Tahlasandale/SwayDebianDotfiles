@@ -59,6 +59,7 @@
             "temperature",
             "backlight",
             "battery",
+            "keyboard-state",
             "clock",
             "custom/power"
         ]
@@ -201,6 +202,7 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "on-click-right": "foot nmtui", // clic droit = gestionnaire reseau
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "tooltip-format": "{ifname} via {gwaddr} ",
@@ -209,7 +211,10 @@
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
+        "scroll-step": 5, // natif = instantane
+        "reverse-scrolling": true, // inverse ICI seulement (natural_scroll global intact)
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle", // clic gauche = muet
+        "on-click-right": "pavucontrol", // clic droit = table de mixage
         "format": "{volume}% {icon} {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
@@ -224,8 +229,7 @@
             "portable": "",
             "car": "",
             "default": ["", "", ""]
-        },
-        "on-click": "pavucontrol"
+        }
     },
     "custom/media": {
         "format": "{icon} {text}",
@@ -245,8 +249,8 @@
 		"menu": "on-click",
 		"menu-file": "/usr/share/waybar/custom_modules/power_menu.xml", // Menu file in resources folder
 		"menu-actions": {
-			"shutdown": "shutdown",
-			"reboot": "reboot",
+			"shutdown": "systemctl poweroff",
+			"reboot": "systemctl reboot",
 			"suspend": "systemctl suspend",
 			"hibernate": "systemctl hibernate"
 		}
