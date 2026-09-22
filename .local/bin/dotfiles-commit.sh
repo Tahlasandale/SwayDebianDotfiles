@@ -13,6 +13,7 @@ $GIT add -f \
   ~/.config/tofi/config \
   ~/.config/mako/config \
   ~/.config/swaylock/config \
+  ~/.config/emptty-sources/conf ~/.config/emptty-sources/motd-art.txt ~/.config/emptty-sources/motd-gen.sh \
   ~/.config/foot/foot.ini \
   ~/.config/fastfetch/config.jsonc ~/.config/fastfetch/minifetch.jsonc ~/.config/fastfetch/logo \
   ~/.config/eza/theme.yml \

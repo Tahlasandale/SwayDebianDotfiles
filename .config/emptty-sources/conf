@@ -1,0 +1,11 @@
+# emptty — configuration (BISON)
+PRINT_ISSUE=false
+PRINT_MOTD=true
+DYNAMIC_MOTD=true
+DYNAMIC_MOTD_PATH=/etc/emptty/motd-gen.sh
+LANG=fr_FR.UTF-8
+VERTICAL_SELECTION=true
+INDENT_SELECTION=4
+ENABLE_NUMLOCK=true
+SELECT_LAST_USER=global
+AUTO_SELECTION=false
