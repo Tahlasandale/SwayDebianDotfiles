@@ -2,6 +2,10 @@
 color=1e1e2e
 image=~/Images/waves.png
 scaling=fill
+indicator
+clock
+timestr=%H:%M
+datestr=%A %d/%m
 indicator-radius=100
 indicator-thickness=8
 font=JetBrainsMono Nerd Font
