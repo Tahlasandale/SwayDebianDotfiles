@@ -60,6 +60,7 @@ exec waybar
 bindsym $mod+Return exec $term
 bindsym $mod+w kill
 bindsym $mod+space exec $menu
+bindsym $mod+l exec swaylock
 bindsym $mod+exclam exec ~/.local/bin/sway-next-wallpaper.sh
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Voulez-vous quitter Sway ?' -B 'Oui, quitter' 'swaymsg exit'
 
