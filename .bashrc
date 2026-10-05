@@ -116,6 +116,14 @@ fi
 export PATH=/home/bison/.opencode/bin:$PATH
 export MOZ_ENABLE_WAYLAND=1
 
+# --- Rust (rustup) ---
+# ~/.cargo/bin doit être dans le PATH : sinon `which rustup` échoue et le shell
+# retombe sur le rustc d'apt (/usr/bin/rustc), beaucoup plus ancien, qui refuse
+# de compiler le binaire Tauri. ~/.cargo/env existe déjà, personne ne le source.
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
 # --- Rice Catppuccin (OptiPlex) ---
 # Binaires locaux user-level (oh-my-posh, yazi, bat->batcat)
 case ":$PATH:" in
