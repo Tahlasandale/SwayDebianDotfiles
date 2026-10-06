@@ -1,0 +1,15 @@
+[{
+  "Name": "markdown_autocomplete",
+  "Description": "Context-aware Markdown completions, lists, and helpers for Micro",
+  "Website": "https://github.com/nufy/markdown-autocomplete",
+  "Tags": ["markdown", "autocomplete", "text", "formatting", "lists"],
+  "Versions": [
+    {
+      "Version": "1.1.0",
+      "Url": "https://github.com/nufy/markdown-autocomplete/archive/refs/tags/v1.1.0.zip",
+      "Require": {
+        "micro": ">=2.0.0"
+      }
+    }
+  ]
+}]

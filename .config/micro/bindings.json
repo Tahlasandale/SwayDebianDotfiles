@@ -1,13 +1,15 @@
 {
-    "F2": "command:tree",
-    "F5": "command:wc",
-    "Alt-o": "command:fzf",
-    "Alt-k": "command:lsp hover",
+    "Alt-/": "lua:comment.comment",
     "Alt-d": "command:lsp goto-definition",
-    "Alt-t": "command:lsp goto-typedefinition",
-    "Alt-r": "command:lsp find-references",
-    "Alt-n": "command:lsp rename",
-    "Alt-s": "command:lsp document-symbols",
+    "Alt-k": "command:lsp hover",
     "Alt-l": "command:lsp format",
-    "CtrlSpace": "command:lsp autocomplete"
+    "Alt-n": "command:lsp rename",
+    "Alt-o": "command:fzf",
+    "Alt-r": "command:lsp find-references",
+    "Alt-s": "command:lsp document-symbols",
+    "Alt-t": "command:lsp goto-typedefinition",
+    "CtrlSpace": "command:lsp autocomplete",
+    "CtrlUnderscore": "lua:comment.comment",
+    "F2": "command:tree",
+    "F5": "command:wc"
 }
