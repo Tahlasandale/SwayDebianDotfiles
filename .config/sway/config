@@ -32,14 +32,14 @@ input type:touchpad {
     natural_scroll enabled
     tap enabled
     click_method clickfinger
+    pointer_accel 0.4
 }
 
 # Inclure les configurations par défaut de Debian (raccourcis médias, polkit, etc.)
 include /etc/sway/config.d/*
 
 # Variables d'environnement essentielles pour Wayland (Firefox, Qt, Écran)
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+# Les variables d'environnement sont importées par /etc/sway/config.d/50-systemd-user.conf
 
 # Fond de secours persistant (restaure a chaque reload/login, la rotation l'ecrase au runtime)
 output * bg ~/Images/waves.png fill
@@ -126,8 +126,5 @@ bindsym $mod+Shift+space floating toggle
 
 bindsym $mod+Shift+r reload
 
-# Syncthing : DOIT rester le tout dernier exec du fichier,
-# afin de demarrer en derniere priorite apres tout l'environnement
-# (env dbus/systemd, papier peint, caps lock, waybar).
-# Ne rien ajouter apres cette ligne.
-exec sh -c 'sleep 3; ~/.local/bin/syncthing serve'
+# Syncthing est géré par ~/.config/systemd/user/syncthing.service
+

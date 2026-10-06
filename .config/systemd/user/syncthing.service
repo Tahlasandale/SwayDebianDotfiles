@@ -1,0 +1,13 @@
+[Unit]
+Description=Syncthing apres le demarrage de la session graphique
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/syncthing-after-session.sh
+Restart=on-failure
+RestartSec=5s
+TimeoutStartSec=infinity
+Slice=background.slice
+
+[Install]
+WantedBy=default.target
