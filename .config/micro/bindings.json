@@ -1,8 +1,11 @@
 {
     "Alt-/": "lua:comment.comment",
+    "Alt-b": "lua:initlua.bold",
     "Alt-d": "command:lsp goto-definition",
+    "Alt-i": "lua:initlua.italic",
     "Alt-k": "command:lsp hover",
     "Alt-l": "command:lsp format",
+    "Alt-m": "lua:initlua.linkify",
     "Alt-n": "command:lsp rename",
     "Alt-o": "command:fzf",
     "Alt-r": "command:lsp find-references",
