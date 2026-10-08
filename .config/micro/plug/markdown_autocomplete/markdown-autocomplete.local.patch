@@ -1,0 +1,265 @@
+--- markdown-autocomplete.lua.orig	2026-10-05 22:56:49.067887022 +0200
++++ markdown-autocomplete.lua	2026-10-05 23:39:02.447851990 +0200
+@@ -71,16 +71,21 @@
+     return -bp.Cursor.Loc
+ end
+ 
++-- Order matters: detectPattern returns the first match, so a longer trigger must
++-- come before any shorter trigger it contains ("![", before "[", "- [" before "[").
++-- The code fence is not part of this table: it is triggered by a run of three or
++-- more backticks, which is detected separately (see backtickRun).
+ local patterns = {
+-    { trigger = "**", insert = "****", description = "Bold text", cursorOffset = 2, skipIfNext = "**", option = "enableFormatting" },
+-    { trigger = "~~", insert = "~~~~", description = "Strikethrough", cursorOffset = 2, skipIfNext = "~~", option = "enableFormatting" },
++    { trigger = "**", insert = "****", description = "Bold text", cursorOffset = 2, skipIfNext = "**", skipIfOpenedBefore = true, option = "enableFormatting" },
++    { trigger = "~~", insert = "~~~~", description = "Strikethrough", cursorOffset = 2, skipIfNext = "~~", skipIfOpenedBefore = true, option = "enableFormatting" },
+     { trigger = "![", insert = "![]()", description = "Image", cursorOffset = 3, option = "enableFormatting" },
+-    { trigger = "[", insert = "[]()", description = "Link", cursorOffset = 3, option = "enableFormatting" },
+-    { trigger = "`", insert = "``", description = "Inline code", cursorOffset = 1, skipIfNext = "`", option = "enableFormatting" },
+-    { trigger = "```", insert = "```\n\n```", description = "Code block", cursorOffset = 4, option = "enableCodeBlocks" },
+-    { trigger = "- [", insert = "- [ ] ", description = "Checklist", cursorOffset = 0, option = "enableChecklists" }
++    { trigger = "`", insert = "``", description = "Inline code", cursorOffset = 1, skipIfNext = "`", onlyInlineContext = true, option = "enableFormatting" },
++    { trigger = "- [", insert = "- [ ] ", description = "Checklist", cursorOffset = 0, option = "enableChecklists" },
++    { trigger = "[", insert = "[]()", description = "Link", cursorOffset = 3, option = "enableFormatting" }
+ }
+ 
++local fencePattern = { insert = "```\n\n```", description = "Code block", cursorOffset = 4, option = "enableCodeBlocks" }
++
+ local autoPairs = {
+     { open = "(", close = ")" },
+     { open = "{", close = "}" },
+@@ -100,6 +105,9 @@
+     return false
+ end
+ 
++-- Returns false to expand the snippet, true to ignore the trigger, or "close" when
++-- the trigger is the closing delimiter of a pair that was already expanded (the
++-- typed characters are then removed instead).
+ local function shouldSkipCompletion(bp, pattern, triggerLen)
+     local cursor = bp.Cursor
+     local line = bp.Buf:Line(cursor.Y)
+@@ -107,7 +115,17 @@
+     if pattern.skipIfNext then
+         local ahead = string.sub(line, column + 1, column + #pattern.skipIfNext)
+         if ahead == pattern.skipIfNext then
+-            return true
++            -- The closing delimiter is already there: what was typed is redundant.
++            return "close"
++        end
++    end
++    -- Symmetric delimiters ("**", "~~", "`") are only expanded once per line: a
++    -- later run is a closing delimiter that the user typed, not a new pair. Without
++    -- this, typing "**bold**" turns into "**bold****".
++    if pattern.skipIfOpenedBefore then
++        local openedBefore = string.sub(line, 1, column - triggerLen)
++        if openedBefore:find(pattern.trigger, 1, true) then
++            return "close"
+         end
+     end
+     if pattern.requireLineStart then
+@@ -116,9 +134,38 @@
+             return true
+         end
+     end
++    -- A backtick must only be paired when it really opens inline code: not when the
++    -- line holds nothing but backticks (that is a code fence, and pairing would stop
++    -- the run from ever reaching three) and not directly behind a word (that is the
++    -- closing backtick the user is typing).
++    if pattern.onlyInlineContext then
++        local beforeTrigger = string.sub(line, 1, column - triggerLen)
++        if beforeTrigger:match("^%s*`*$") then
++            return true
++        end
++        local prevChar = string.sub(line, column - triggerLen, column - triggerLen)
++        if prevChar:match("%w") then
++            return true
++        end
++    end
+     return false
+ end
+ 
++-- Returns the number of consecutive backticks directly left of the cursor, which is
++-- the run of backticks the user actually typed.
++local function backtickRun(bp)
++    local cursor = bp.Cursor
++    local line = bp.Buf:Line(cursor.Y)
++    local run = 0
++    for i = cursor.X, 1, -1 do
++        if string.sub(line, i, i) ~= "`" then
++            break
++        end
++        run = run + 1
++    end
++    return run
++end
++
+ local function detectPattern(bp)
+     if not isMarkdownFile(bp) then
+         return nil
+@@ -129,6 +176,15 @@
+     if column == 0 then
+         return nil
+     end
++    -- Three or more backticks open a code fence. The whole run is matched and
++    -- replaced, otherwise the closing backtick of an inline code pair would be
++    -- left in front of the fence.
++    if getOption("enableCodeBlocks") then
++        local run = backtickRun(bp)
++        if run >= 3 then
++            return fencePattern, run
++        end
++    end
+     for _, pattern in ipairs(patterns) do
+         if not pattern.option or getOption(pattern.option) then
+             local triggerLen = #pattern.trigger
+@@ -136,8 +192,14 @@
+                 local startPos = column - triggerLen + 1
+                 if startPos >= 1 then
+                     local snippet = string.sub(line, startPos, column)
+-                    if snippet == pattern.trigger and not shouldSkipCompletion(bp, pattern, triggerLen) then
+-                        return pattern, triggerLen
++                    if snippet == pattern.trigger then
++                        local skip = shouldSkipCompletion(bp, pattern, triggerLen)
++                        if skip == "close" then
++                            return pattern, triggerLen, "close"
++                        end
++                        if not skip then
++                            return pattern, triggerLen
++                        end
+                     end
+                 end
+             end
+@@ -157,19 +219,73 @@
+     end
+ end
+ 
++-- The user typed the closing delimiter of a pair this plugin already expanded. The
++-- pair is complete, so the typed run is simply removed again and the cursor ends up
++-- after the delimiter: "**bold**" stays "**bold**" instead of "**bold****".
++local function closeTrigger(bp, triggerLen)
++    for _ = 1, triggerLen do
++        bp:Backspace()
++    end
++end
++
++-- onRune runs after the rune has been inserted, so the typed character sits at
++-- cursor.X - 1, cursor.X is the character right after it, and cursor.X - 1 is
++-- the character before it.
+ local function handleAutoPair(bp, rune)
+     if not getOption("enableAutoPairs") then
+         return
+     end
+-    local ok, char = pcall(string.char, rune)
+-    if not ok or not char then
++    -- Micro hands the rune to Lua as a one character string; older versions pass
++    -- a number. Accept both, otherwise the pairing silently never happens.
++    local char = rune
++    if type(char) == "number" then
++        char = string.char(char)
++    end
++    if type(char) ~= "string" or char == "" then
+         return
+     end
++    local cursor = bp.Cursor
++    local line = bp.Buf:Line(cursor.Y)
++    local nextChar = string.sub(line, cursor.X + 1, cursor.X + 1)
++    local prevChar = string.sub(line, cursor.X - 1, cursor.X - 1)
+     for _, pair in ipairs(autoPairs) do
++        if char == pair.close then
++            -- The closer already exists further right: drop the typed duplicate
++            -- and step over the existing one.
++            if nextChar == pair.close then
++                bp:Backspace()
++                cursor:Right()
++                return
++            end
++            -- The pair is already complete: step back inside it instead of
++            -- appending a second closer.
++            if prevChar == pair.open then
++                cursor:Left()
++                return
++            end
++            -- Keep apostrophes and quotes inside a word intact (don't, he's).
++            if prevChar:match("%w") then
++                return
++            end
++        end
+         if char == pair.open then
++            -- Do not pair when a word follows, the closer would end up in front
++            -- of it.
++            if nextChar:match("%w") then
++                return
++            end
++            -- Do not pair when the closer is already there.
++            if nextChar == pair.close then
++                return
++            end
++            -- An identical opener is already there: step over it.
++            if nextChar == pair.open then
++                cursor:Right()
++                return
++            end
+             bp.Buf:Insert(cursorLoc(bp), pair.close)
+-            bp.Cursor:Left()
+-            break
++            cursor:Left()
++            return
+         end
+     end
+ end
+@@ -283,13 +399,53 @@
+     micro.InfoBar():Message(table.concat(parts, ", "))
+ end
+ 
++-- The link and image snippets expand to "[]()" / "![]()". Typing the closing "]" by
++-- hand must not leave a stray bracket, and it should move the cursor to the place
++-- the target belongs, so "[", "label", "]" puts the cursor between the parentheses.
++local function handleSnippetCloser(bp, rune)
++    if not getOption("enableFormatting") then
++        return false
++    end
++    local char = rune
++    if type(char) == "number" then
++        char = string.char(char)
++    end
++    if type(char) ~= "string" then
++        return false
++    end
++    local cursor = bp.Cursor
++    local line = bp.Buf:Line(cursor.Y)
++    local ahead = string.sub(line, cursor.X + 1, cursor.X + 1)
++    if (char == "]" or char == ")") and (ahead == "]" or ahead == ")") then
++        bp:Backspace()
++        -- Walk over the closing bracket and the opening parenthesis of the snippet.
++        for _ = 1, 2 do
++            line = bp.Buf:Line(cursor.Y)
++            local next_ = string.sub(line, cursor.X + 1, cursor.X + 1)
++            if next_ ~= "]" and next_ ~= "(" then
++                break
++            end
++            cursor:Right()
++        end
++        return true
++    end
++    return false
++end
++
+ function onRune(bp, rune)
+     if not isMarkdownFile(bp) then
+         return true
+     end
+-    local pattern, triggerLen = detectPattern(bp)
++    local pattern, triggerLen, action = detectPattern(bp)
+     if pattern then
+-        insertCompletion(bp, pattern, triggerLen)
++        if action == "close" then
++            closeTrigger(bp, triggerLen)
++        else
++            insertCompletion(bp, pattern, triggerLen)
++        end
++        return true
++    end
++    if handleSnippetCloser(bp, rune) then
+         return true
+     end
+     handleAutoPair(bp, rune)

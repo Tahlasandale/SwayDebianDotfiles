@@ -1,9 +1,9 @@
 [Unit]
-Description=Verifie la batterie toutes les 2 min
+Description=Verifie la batterie toutes les 5 min
 
 [Timer]
 OnBootSec=1min
-OnUnitActiveSec=2min
+OnUnitActiveSec=5min
 AccuracySec=30s
 
 [Install]
