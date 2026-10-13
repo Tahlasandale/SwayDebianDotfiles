@@ -58,6 +58,7 @@ exec waybar
 
 # Raccourcis de base
 bindsym $mod+Return exec $term
+bindsym $mod+o exec foot -e /home/bison/.local/bin/cdd-opencode.sh
 bindsym $mod+w kill
 bindsym $mod+space exec $menu
 bindsym $mod+l exec swaylock
