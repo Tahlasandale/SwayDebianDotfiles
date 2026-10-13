@@ -138,3 +138,7 @@ minifetch
 
 # dotfiles (bare repo Sway)
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/bison/.local/bin:$PATH"

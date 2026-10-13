@@ -15,6 +15,7 @@ $GIT add -f \
   ~/.config/swaylock/config \
   ~/.config/emptty-sources/conf ~/.config/emptty-sources/motd-art.txt ~/.config/emptty-sources/motd-gen.sh \
   ~/.local/bin/swaylock-effects-build.sh \
+  ~/README.md \
   ~/.config/foot/foot.ini \
   ~/.config/fastfetch/config.jsonc ~/.config/fastfetch/minifetch.jsonc ~/.config/fastfetch/logo \
   ~/.config/eza/theme.yml \
