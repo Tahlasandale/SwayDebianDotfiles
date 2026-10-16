@@ -1,4 +1,4 @@
 #!/bin/sh
-export XCURSOR_THEME="catppuccin-mocha-sky-cursors"
-export XCURSOR_SIZE="28"
+export XCURSOR_THEME="Bibata-Modern-Sky"
+export XCURSOR_SIZE="40"
 exec sway --unsupported-gpu

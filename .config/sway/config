@@ -35,8 +35,8 @@ input type:touchpad {
     pointer_accel 0.4
 }
 
-# --- Theme de Curseur (Catppuccin Mocha Sky / Cyan 28px) ---
-seat * xcursor_theme catppuccin-mocha-sky-cursors 28
+# --- Theme de Curseur (Bibata Modern Catppuccin Sky / Cyan 40px) ---
+seat * xcursor_theme Bibata-Modern-Sky 40
 
 # Inclure les configurations par défaut de Debian (raccourcis médias, polkit, etc.)
 include /etc/sway/config.d/*
