@@ -41,7 +41,7 @@ docker() {
 }
 
 # --- Recherche DuckDuckGo dans w3m ---
-ddg() {
+wwww() {
     if [ -z "$1" ]; then
         w3m "https://lite.duckduckgo.com"
     else
