@@ -22,7 +22,7 @@ Rice du poste Debian 13 « bison » : **Sway** (Wayland) au quotidien, **KDE Pla
 | nmtui | Réseau (clic droit sur le wifi Waybar) |
 | systemd (user) | Timers maison : alertes batterie, rotation de fond d'écran |
 
-Scripts maison dans `~/.local/bin/` : `sway-cycle-workspaces.sh`, `sway-move-to-ws.sh`, `battery-alert.sh`, `boot-info.sh`, `sway-next-wallpaper.sh`, `swaylock-effects-build.sh`, `grub-theme-install.sh`, `tmnationsforever`, `tm-backup.sh`, `tm-restore.sh`, `boot-optimize.sh`, `boot-restore-defaults.sh`, `waybar-syncthing.sh`, `waybar-megasync.sh`, `dotfiles-commit.sh`.
+Scripts maison dans `~/.local/bin/` : `sway-cycle-workspaces.sh`, `sway-move-to-ws.sh`, `battery-alert.sh`, `boot-info.sh`, `sway-next-wallpaper.sh`, `swaylock-effects-build.sh`, `grub-theme-install.sh`, `tmnationsforever`, `tm-backup.sh`, `tm-restore.sh`, `boot-optimize.sh`, `boot-restore-defaults.sh`, `waybar-syncthing.sh`, `waybar-megasync.sh`, `cursor-install.sh`, `dotfiles-commit.sh`.
 
 ## Réinstallation & Inventaire
 

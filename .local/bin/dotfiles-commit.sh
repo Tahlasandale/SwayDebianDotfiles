@@ -45,6 +45,7 @@ $GIT add -f \
   ~/.local/bin/sway-cycle-workspace.sh \
   ~/.local/bin/battery-alert.sh \
   ~/.local/bin/boot-optimize.sh ~/.local/bin/boot-restore-defaults.sh \
+  ~/.local/bin/cursor-install.sh ~/.icons/default/index.theme \
   ~/.gitconfig \
   ~/.local/bin/dotfiles-commit.sh
 
