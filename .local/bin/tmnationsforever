@@ -1,0 +1,31 @@
+#!/bin/bash
+# Lance TM Nations Forever en 1920x1080 via le snap Wine.
+#
+# Deux contournements sont necessaires :
+#  - le `cd` : sans lui le jeu ne trouve pas GameData/Translations et crash
+#    ("impossible de trouver les fichiers de traduction"). C'est ce que fait
+#    /snap/tmnationsforever/51/bin/sommelier:lignes 222-223.
+#  - TERM=xterm-256color : le snap n'embarque pas d'entree terminfo "foot",
+#    ce qui sortait "'foot': unknown terminal type."
+#  - /desktop=virtual,<res> : le snap passe par SOMMELIER_VIRTDESKTOP=1 et
+#    calcule une resolution vide sous sway (son grep XWAYLAND ne matche rien),
+#    d'ou une fenetre en 800x600.
+
+GAME_DIR="/home/bison/snap/tmnationsforever/common/.wine/drive_c/Program Files (x86)/TmNationsForever"
+RES="${1:-1920x1080}"
+
+# Des processus Wine fantomes avec un etat X11 corrompu font echouer le
+# lancement (X Error: BadWindow) et superposent des bureaux virtuels.
+# `explorer /desktop=...` doit aussi etre tue, sinon la fenetre 800x600 de
+# l'instance precedente reste affichee par-dessus la nouvelle.
+pkill -9 -f 'TmForever\.exe' 2>/dev/null
+pkill -9 -f 'explorer /desktop' 2>/dev/null
+pkill -9 -f 'wineserver'     2>/dev/null
+pkill -9 -f 'winedevice\.exe' 2>/dev/null
+pkill -9 -f 'bin/sommelier'  2>/dev/null
+sleep 1
+
+cd "$GAME_DIR" || exit 1
+exec env TERM=xterm-256color /snap/bin/tmnationsforever.wine \
+    explorer "/desktop=virtual,$RES" \
+    'C:\Program Files (x86)\TmNationsForever\TmForeverLauncher.exe'

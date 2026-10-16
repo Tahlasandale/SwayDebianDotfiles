@@ -1,0 +1,20 @@
+[Unit]
+Description=monoxide ProtonMail bridge (IMAP/SMTP/CardDAV/CalDAV on localhost)
+Documentation=https://github.com/Tahlasandale/monoxide
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/systemd/user/monoxide.env
+ExecStart=%h/.local/bin/monoxide serve
+Restart=on-failure
+RestartSec=10
+
+# The bridge exits if a stored Proton refresh token expires and it cannot
+# re-authenticate on its own; a human has to run `monoxide auth <username>`.
+# Avoid hot-looping in that case.
+RestartPreventExitStatus=0
+
+[Install]
+WantedBy=default.target

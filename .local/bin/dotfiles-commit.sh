@@ -34,9 +34,16 @@ $GIT add -f \
   ~/.config/systemd/user/timers.target.wants/battery-alert.timer \
   ~/.config/systemd/user/waybar.service ~/.config/systemd/user/mako.service ~/.config/systemd/user/foot-server.service ~/.config/systemd/user/foot-server.socket \
   ~/.bashrc ~/.bash_aliases ~/.tmux.conf ~/.profile \
+  ~/.config/sway/outputs \
+  ~/.config/gtk-3.0/settings.ini ~/.config/gtk-4.0/settings.ini ~/.config/xsettingsd/xsettingsd.conf ~/.gtkrc-2.0 \
+  ~/.config/systemd/user/monoxide.service ~/.config/systemd/user/monoxide.env.example \
+  ~/.local/bin/tmnationsforever ~/.local/bin/tm-backup.sh ~/.local/bin/tm-restore.sh \
+  ~/.config/trackmania-sources \
+  ~/INVENTORY.md ~/.config/system-sources/packages-apt.txt \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \
   ~/.local/bin/sway-cycle-workspace.sh \
   ~/.local/bin/battery-alert.sh \
+  ~/.gitconfig \
   ~/.local/bin/dotfiles-commit.sh
 
 # Garde-fou secrets : abort si l'index contient un chemin sensible
