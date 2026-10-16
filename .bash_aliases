@@ -39,3 +39,14 @@ docker() {
     fi
     command docker "$@"
 }
+
+# --- Recherche DuckDuckGo dans w3m ---
+ddg() {
+    if [ -z "$1" ]; then
+        w3m "https://lite.duckduckgo.com"
+    else
+        local query="${*// /+}"
+        w3m "https://lite.duckduckgo.com/lite/?q=${query}"
+    fi
+}
+
