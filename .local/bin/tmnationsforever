@@ -11,7 +11,13 @@
 #    calcule une resolution vide sous sway (son grep XWAYLAND ne matche rien),
 #    d'ou une fenetre en 800x600.
 
-# Demarrage a la demande de Snapd si non actif
+# 1. Activation d'AppArmor pour Snap (requis pour snap-confine)
+if ! systemctl is-active --quiet snapd.apparmor.service; then
+    echo "Activation du confinement AppArmor pour Snap..."
+    sudo systemctl start snapd.apparmor.service
+fi
+
+# 2. Demarrage a la demande de Snapd si non actif
 if ! systemctl is-active --quiet snapd.service; then
     echo "Demarrage de Snapd pour TrackMania..."
     sudo systemctl start snapd.service snapd.socket

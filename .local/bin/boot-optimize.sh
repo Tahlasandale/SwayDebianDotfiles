@@ -14,9 +14,10 @@ echo "2. Passage de Docker en démarrage à la demande..."
 sudo systemctl disable docker.service containerd.service 2>/dev/null || true
 sudo systemctl enable docker.socket 2>/dev/null || true
 
-# 3. Snapd & Seeding : Neutralisation complète au boot (activé à la demande par TrackMania)
-echo "3. Désactivation de Snapd et de snapd.seeded au boot..."
-sudo systemctl disable snapd.service snapd.socket snapd.seeded.service snapd.apparmor.service 2>/dev/null || true
+# 3. Snapd & Seeding : Neutralisation du démon lourd et de snapd.seeded au boot
+echo "3. Désactivation de Snapd et seeding (AppArmor conservé actif)..."
+sudo systemctl disable snapd.service snapd.socket snapd.seeded.service 2>/dev/null || true
+sudo systemctl enable --now snapd.apparmor.service 2>/dev/null || true
 
 # 4. Blueman, ModemManager, Smartmontools : Désactivation au boot
 echo "4. Désactivation des services périphériques non essentiels..."
