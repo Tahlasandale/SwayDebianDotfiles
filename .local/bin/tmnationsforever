@@ -11,6 +11,12 @@
 #    calcule une resolution vide sous sway (son grep XWAYLAND ne matche rien),
 #    d'ou une fenetre en 800x600.
 
+# Demarrage a la demande de Snapd si non actif
+if ! systemctl is-active --quiet snapd.service; then
+    echo "Demarrage de Snapd pour TrackMania..."
+    sudo systemctl start snapd.service snapd.socket
+fi
+
 GAME_DIR="/home/bison/snap/tmnationsforever/common/.wine/drive_c/Program Files (x86)/TmNationsForever"
 RES="${1:-1920x1080}"
 

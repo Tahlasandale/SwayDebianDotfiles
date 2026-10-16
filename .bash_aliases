@@ -30,3 +30,12 @@ alias cdd='cd_to_dir'
 
 # Antigravity CLI
 alias agy-y='agy --dangerously-skip-permissions'
+
+# --- Docker a la demande (On-Demand) ---
+docker() {
+    if ! systemctl is-active --quiet docker; then
+        echo "Demarrage automatique du service Docker..."
+        sudo systemctl start docker
+    fi
+    command docker "$@"
+}

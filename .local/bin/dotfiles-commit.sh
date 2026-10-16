@@ -43,6 +43,7 @@ $GIT add -f \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \
   ~/.local/bin/sway-cycle-workspace.sh \
   ~/.local/bin/battery-alert.sh \
+  ~/.local/bin/boot-optimize.sh ~/.local/bin/boot-restore-defaults.sh \
   ~/.gitconfig \
   ~/.local/bin/dotfiles-commit.sh
 
