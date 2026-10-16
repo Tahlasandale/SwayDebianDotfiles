@@ -61,6 +61,7 @@
             "memory",
             "temperature",
             "backlight",
+            "custom/displays",
             "battery",
             "keyboard-state",
             "clock",
@@ -263,6 +264,12 @@
         "on-click": "pgrep -x megasync >/dev/null || megasync &",
         "on-double-click": "swaymsg '[class=\"(?i)megasync\"] focus' 2>/dev/null || swaymsg '[app_id=\"(?i)megasync\"] focus' 2>/dev/null || megasync &",
         "on-click-right": "killall megasync 2>/dev/null || true"
+    },
+    "custom/displays": {
+        "format": "󰍹",
+        "tooltip": true,
+        "tooltip-format": "Écrans (nwg-displays)\n1 clic : Ouvrir les paramètres d'affichage",
+        "on-click": "nwg-displays"
     },
     "custom/media": {
         "format": "{icon} {text}",

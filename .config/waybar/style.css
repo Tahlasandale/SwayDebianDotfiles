@@ -127,6 +127,7 @@ button:hover {
 #memory,
 #temperature,
 #backlight,
+#custom-displays,
 #battery,
 #keyboard-state,
 #clock,
@@ -227,6 +228,15 @@ button:hover {
 
 #backlight {
     color: @sky;
+}
+
+#custom-displays {
+    color: @sapphire;
+}
+
+#custom-displays:hover {
+    background-color: @surface1;
+    border-radius: 8px;
 }
 
 #network {
