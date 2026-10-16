@@ -14,6 +14,8 @@ $GIT add -f \
   ~/.config/mako/config \
   ~/.config/swaylock/config \
   ~/.config/emptty-sources/conf ~/.config/emptty-sources/motd-art.txt ~/.config/emptty-sources/motd-gen.sh \
+  ~/.config/grub-sources/theme.cfg ~/.config/grub-sources/themes \
+  ~/.local/bin/grub-theme-install.sh \
   ~/.local/bin/swaylock-effects-build.sh \
   ~/README.md \
   ~/.local/bin/sway-move-to-ws.sh ~/.local/bin/cdd-opencode.sh \

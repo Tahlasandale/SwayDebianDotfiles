@@ -17,11 +17,12 @@ Rice du poste Debian 13 « bison » : **Sway** (Wayland) au quotidien, **KDE Pla
 | yazi | Explorateur de fichiers |
 | fastfetch | Infos système (profil `minifetch` léger + alias `clear`) |
 | **figlet** | Bannières ASCII |
+| GRUB | Bootloader — thème *Astronaut* (base Catppuccin Mocha, JetBrains Mono, 1080p) |
 | pactl / pavucontrol | Son (scroll natif inversé, mute, volume UI) |
 | nmtui | Réseau (clic droit sur le wifi Waybar) |
 | systemd (user) | Timers maison : alertes batterie, rotation de fond d'écran |
 
-Scripts maison dans `~/.local/bin/` : `sway-cycle-workspaces.sh`, `sway-move-to-ws.sh`, `battery-alert.sh`, `boot-info.sh`, `sway-next-wallpaper.sh`, `swaylock-effects-build.sh`, `dotfiles-commit.sh`.
+Scripts maison dans `~/.local/bin/` : `sway-cycle-workspaces.sh`, `sway-move-to-ws.sh`, `battery-alert.sh`, `boot-info.sh`, `sway-next-wallpaper.sh`, `swaylock-effects-build.sh`, `grub-theme-install.sh`, `dotfiles-commit.sh`.
 
 ## Workflow
 

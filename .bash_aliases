@@ -27,3 +27,6 @@ cd_to_dir() {
     [ -n "$selected_dir" ] && cd "$selected_dir"
 }
 alias cdd='cd_to_dir'
+
+# Antigravity CLI
+alias agy-y='agy --dangerously-skip-permissions'
