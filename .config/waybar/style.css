@@ -118,7 +118,10 @@ button:hover {
 #tray,
 #idle_inhibitor,
 #pulseaudio,
+#bluetooth,
 #network,
+#custom-syncthing,
+#custom-megasync,
 #power-profiles-daemon,
 #cpu,
 #memory,
@@ -245,6 +248,50 @@ button:hover {
 }
 
 #pulseaudio:hover {
+    background-color: @surface1;
+    border-radius: 8px;
+}
+
+#bluetooth {
+    color: @blue;
+}
+
+#bluetooth.off,
+#bluetooth.disabled {
+    color: @overlay0;
+}
+
+#bluetooth.connected {
+    color: @sapphire;
+}
+
+#bluetooth:hover {
+    background-color: @surface1;
+    border-radius: 8px;
+}
+
+#custom-syncthing {
+    color: @teal;
+}
+
+#custom-syncthing.stopped {
+    color: @overlay0;
+}
+
+#custom-syncthing:hover {
+    background-color: @surface1;
+    border-radius: 8px;
+}
+
+#custom-megasync {
+    color: @red;
+}
+
+#custom-megasync.stopped {
+    color: @overlay0;
+}
+
+#custom-megasync:hover {
     background-color: @surface1;
     border-radius: 8px;
 }

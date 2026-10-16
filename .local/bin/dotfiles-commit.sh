@@ -38,6 +38,7 @@ $GIT add -f \
   ~/.config/gtk-3.0/settings.ini ~/.config/gtk-4.0/settings.ini ~/.config/xsettingsd/xsettingsd.conf ~/.gtkrc-2.0 \
   ~/.config/systemd/user/monoxide.service ~/.config/systemd/user/monoxide.env.example \
   ~/.local/bin/tmnationsforever ~/.local/bin/tm-backup.sh ~/.local/bin/tm-restore.sh \
+  ~/.local/bin/waybar-syncthing.sh ~/.local/bin/waybar-megasync.sh \
   ~/.config/trackmania-sources \
   ~/INVENTORY.md ~/.config/system-sources/packages-apt.txt \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \

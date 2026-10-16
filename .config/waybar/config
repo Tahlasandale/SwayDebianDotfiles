@@ -52,7 +52,10 @@
         "modules": [
             "idle_inhibitor",
             "pulseaudio",
+            "bluetooth",
             "network",
+            "custom/syncthing",
+            "custom/megasync",
             "power-profiles-daemon",
             "cpu",
             "memory",
@@ -230,6 +233,36 @@
             "car": "",
             "default": ["", "", ""]
         }
+    },
+    "bluetooth": {
+        "format": "",
+        "format-disabled": "󰂲",
+        "format-off": "󰂲",
+        "format-connected": " {num_connections}",
+        "tooltip-format": "Bluetooth: {status}\n1 clic : Activer / Désactiver\nDouble-clic : Gestionnaire Blueman",
+        "tooltip-format-connected": "Bluetooth: {num_connections} connecté(s)\n{device_enumerate}\n\n1 clic : Activer / Désactiver\nDouble-clic : Gestionnaire Blueman",
+        "tooltip-format-disabled": "Bluetooth désactivé\n1 clic : Activer\nDouble-clic : Gestionnaire Blueman",
+        "tooltip-format-off": "Bluetooth éteint\n1 clic : Allumer\nDouble-clic : Gestionnaire Blueman",
+        "on-click": "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on",
+        "on-double-click": "blueman-manager"
+    },
+    "custom/syncthing": {
+        "exec": "$HOME/.local/bin/waybar-syncthing.sh",
+        "return-type": "json",
+        "interval": 3,
+        "format": "{text}",
+        "on-click": "systemctl --user start syncthing.service",
+        "on-double-click": "xdg-open http://127.0.0.1:8384",
+        "on-click-right": "systemctl --user stop syncthing.service"
+    },
+    "custom/megasync": {
+        "exec": "$HOME/.local/bin/waybar-megasync.sh",
+        "return-type": "json",
+        "interval": 3,
+        "format": "{text}",
+        "on-click": "pgrep -x megasync >/dev/null || megasync &",
+        "on-double-click": "swaymsg '[class=\"(?i)megasync\"] focus' 2>/dev/null || swaymsg '[app_id=\"(?i)megasync\"] focus' 2>/dev/null || megasync &",
+        "on-click-right": "killall megasync 2>/dev/null || true"
     },
     "custom/media": {
         "format": "{icon} {text}",
