@@ -22,7 +22,7 @@
 		<file>Skins\Avatars\Flags\ARG.dds</file>
 		<checksum>0x9B0746803B31789C853DA4BD760E0BCC</checksum>
 		<size>8 320</size>
-		<lastuse>25/03/2008 20:52</lastuse>
+		<lastuse>19/10/2026 07:28</lastuse>
 	</packdesc>
 	<packdesc>
 		<name>Skins\Avatars\Flags\AUS.dds</name>
@@ -30,7 +30,7 @@
 		<file>Skins\Avatars\Flags\AUS.dds</file>
 		<checksum>0x1DD603CF527380562E6796D347C5A136</checksum>
 		<size>8 320</size>
-		<lastuse>21/01/2006 13:37</lastuse>
+		<lastuse>19/10/2026 07:28</lastuse>
 	</packdesc>
 	<packdesc>
 		<name>Skins\Avatars\Flags\AUT.dds</name>
@@ -238,7 +238,7 @@
 		<file>Skins\Avatars\Flags\FRA.dds</file>
 		<checksum>0x034EA0BCB83EB039EF62129720F1A95F</checksum>
 		<size>16 512</size>
-		<lastuse>15/10/2026 17:56</lastuse>
+		<lastuse>19/10/2026 07:28</lastuse>
 	</packdesc>
 	<packdesc>
 		<name>Skins\Avatars\Flags\GBR.dds</name>
@@ -742,7 +742,7 @@
 		<file>Skins\Avatars\Flags\USA.dds</file>
 		<checksum>0x106B8A29934C7DE4D5E04623198A0B6E</checksum>
 		<size>16 512</size>
-		<lastuse>13/01/2006 13:31</lastuse>
+		<lastuse>16/10/2026 19:03</lastuse>
 	</packdesc>
 	<packdesc>
 		<name>Skins\Avatars\Flags\UZB.DDS</name>
