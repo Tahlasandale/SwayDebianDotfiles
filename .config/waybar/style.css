@@ -129,7 +129,6 @@ button:hover {
 #backlight,
 #custom-displays,
 #battery,
-#keyboard-state,
 #clock,
 #custom-power {
     min-width: 12px;
@@ -145,13 +144,25 @@ button:hover {
 }
 
 #keyboard-state {
-    color: @mauve;
+    margin: 1px 2px;
 }
 
-#keyboard-state.locked {
-    color: @crust;
-    background-color: @mauve;
-    border-radius: 8px;
+#keyboard-state label {
+    padding: 0 4px;
+    margin: 0 2px;
+    color: @overlay0;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+#keyboard-state label.locked {
+    color: @peach;
+    background: transparent;
+    font-weight: bold;
+}
+
+#keyboard-state:hover label {
+    color: @peach;
 }
 
 #clock {

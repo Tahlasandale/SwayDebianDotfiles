@@ -63,7 +63,8 @@
             "backlight",
             "custom/displays",
             "battery",
-            "keyboard-state",
+            "keyboard-state#num",
+            "keyboard-state#caps",
             "clock",
             "custom/power"
         ]
@@ -94,14 +95,25 @@
     //         "default": ""
     //     }
     // },
-    "keyboard-state": {
+    "keyboard-state#num": {
         "numlock": true,
+        "capslock": false,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        },
+        "on-click": "/home/bison/.local/bin/toggle-key.py numlock"
+    },
+    "keyboard-state#caps": {
+        "numlock": false,
         "capslock": true,
         "format": "{name} {icon}",
         "format-icons": {
             "locked": "",
             "unlocked": ""
-        }
+        },
+        "on-click": "/home/bison/.local/bin/toggle-key.py capslock"
     },
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
