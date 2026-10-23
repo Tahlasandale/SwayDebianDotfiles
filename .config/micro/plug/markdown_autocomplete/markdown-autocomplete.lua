@@ -89,8 +89,7 @@ local fencePattern = { insert = "```\n\n```", description = "Code block", cursor
 local autoPairs = {
     { open = "(", close = ")" },
     { open = "{", close = "}" },
-    { open = "\"", close = "\"" },
-    { open = "'", close = "'" }
+    { open = "\"", close = "\"" }
 }
 
 local function isMarkdownFile(bp)
@@ -100,6 +99,18 @@ local function isMarkdownFile(bp)
     end
     local name = bp.Buf:GetName()
     if name and (name:match("%.md$") or name:match("%.markdown$")) then
+        return true
+    end
+    return false
+end
+
+local function isListSupportedFile(bp)
+    local ft = bp.Buf:FileType()
+    if ft == "markdown" or ft == "md" or ft == "typst" then
+        return true
+    end
+    local name = bp.Buf:GetName()
+    if name and (name:match("%.md$") or name:match("%.markdown$") or name:match("%.typ$")) then
         return true
     end
     return false
@@ -453,7 +464,7 @@ function onRune(bp, rune)
 end
 
 function onInsertNewline(bp)
-    if not isMarkdownFile(bp) then
+    if not isListSupportedFile(bp) then
         return true
     end
     handleListContinuation(bp)

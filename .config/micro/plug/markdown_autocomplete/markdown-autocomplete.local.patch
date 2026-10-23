@@ -1,6 +1,6 @@
 --- markdown-autocomplete.lua.orig	2026-10-05 22:56:49.067887022 +0200
-+++ markdown-autocomplete.lua	2026-10-05 23:39:02.447851990 +0200
-@@ -71,16 +71,21 @@
++++ markdown-autocomplete.lua	2026-10-23 14:56:41.999904028 +0200
+@@ -71,21 +71,25 @@
      return -bp.Cursor.Loc
  end
  
@@ -28,17 +28,35 @@
  local autoPairs = {
      { open = "(", close = ")" },
      { open = "{", close = "}" },
-@@ -100,6 +105,9 @@
+-    { open = "\"", close = "\"" },
+-    { open = "'", close = "'" }
++    { open = "\"", close = "\"" }
+ }
+ 
+ local function isMarkdownFile(bp)
+@@ -100,6 +104,21 @@
      return false
  end
  
++local function isListSupportedFile(bp)
++    local ft = bp.Buf:FileType()
++    if ft == "markdown" or ft == "md" or ft == "typst" then
++        return true
++    end
++    local name = bp.Buf:GetName()
++    if name and (name:match("%.md$") or name:match("%.markdown$") or name:match("%.typ$")) then
++        return true
++    end
++    return false
++end
++
 +-- Returns false to expand the snippet, true to ignore the trigger, or "close" when
 +-- the trigger is the closing delimiter of a pair that was already expanded (the
 +-- typed characters are then removed instead).
  local function shouldSkipCompletion(bp, pattern, triggerLen)
      local cursor = bp.Cursor
      local line = bp.Buf:Line(cursor.Y)
-@@ -107,7 +115,17 @@
+@@ -107,7 +126,17 @@
      if pattern.skipIfNext then
          local ahead = string.sub(line, column + 1, column + #pattern.skipIfNext)
          if ahead == pattern.skipIfNext then
@@ -57,7 +75,7 @@
          end
      end
      if pattern.requireLineStart then
-@@ -116,9 +134,38 @@
+@@ -116,9 +145,38 @@
              return true
          end
      end
@@ -96,7 +114,7 @@
  local function detectPattern(bp)
      if not isMarkdownFile(bp) then
          return nil
-@@ -129,6 +176,15 @@
+@@ -129,6 +187,15 @@
      if column == 0 then
          return nil
      end
@@ -112,7 +130,7 @@
      for _, pattern in ipairs(patterns) do
          if not pattern.option or getOption(pattern.option) then
              local triggerLen = #pattern.trigger
-@@ -136,8 +192,14 @@
+@@ -136,8 +203,14 @@
                  local startPos = column - triggerLen + 1
                  if startPos >= 1 then
                      local snippet = string.sub(line, startPos, column)
@@ -129,7 +147,7 @@
                      end
                  end
              end
-@@ -157,19 +219,73 @@
+@@ -157,19 +230,73 @@
      end
  end
  
@@ -207,7 +225,7 @@
          end
      end
  end
-@@ -283,13 +399,53 @@
+@@ -283,13 +410,53 @@
      micro.InfoBar():Message(table.concat(parts, ", "))
  end
  
@@ -263,3 +281,12 @@
          return true
      end
      handleAutoPair(bp, rune)
+@@ -297,7 +464,7 @@
+ end
+ 
+ function onInsertNewline(bp)
+-    if not isMarkdownFile(bp) then
++    if not isListSupportedFile(bp) then
+         return true
+     end
+     handleListContinuation(bp)

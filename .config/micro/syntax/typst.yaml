@@ -1,0 +1,42 @@
+filetype: typst
+
+detect:
+  filename: "\\.typ$"
+
+rules:
+  # Commentaires
+  - comment: "//.*"
+
+  # Titres (= Titre, == Titre, === Titre...)
+  - statement: "^[ \t]*=+[ \t]+.*"
+
+  # Gras Typst (*texte*)
+  - statement: "\\*[^*\\n]+\\*"
+
+  # Italique Typst (_texte_)
+  - underlined: "_[^_\\n]+_"
+
+  # Code inline (`code`)
+  - constant.string: "`[^`\\n]+`"
+
+  # Formules mathématiques ($formule$)
+  - type: "\\$[^$\\n]+\\$"
+
+  # Puces de listes (- puce, + puce numérotée)
+  - symbol: "^[ \t]*[-+] "
+
+  # Listes de définitions (/ Terme : description)
+  - statement: "^[ \t]*/[ \t]+[^:]+:"
+
+  # Mots-clés de programmation Typst
+  - statement: "#(let|set|show|import|include|if|else|for|while|return|context)\\b"
+
+  # Fonctions Typst courantes (#text, #page, #align, #grid, #rect, #table, etc.)
+  - identifier: "#[a-zA-Z0-9_.-]+"
+
+  # Labels <label> et Références @label
+  - constant.specialChar: "<[a-zA-Z0-9_-]+>"
+  - constant.specialChar: "@[a-zA-Z0-9_-]+"
+
+  # Chaînes de caractères
+  - constant.string: "\"[^\"\\\\]*\""

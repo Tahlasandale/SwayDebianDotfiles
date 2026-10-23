@@ -201,6 +201,11 @@ languageServer = {
         cmd = "docker-compose-langserver",
         args = {"--stdio"},
         filetypes = {"yaml"}
+    },
+    tinymist = {
+        shortName = "tinymist",
+        cmd = "tinymist",
+        filetypes = {"typst"}
     }
 }
 
@@ -242,6 +247,7 @@ settings = {
         python     = { languageServer.pyright },
         c          = { languageServer.clangd },
         ["c++"]    = { languageServer.clangd },
+        typst      = { languageServer.tinymist },
     },
 
     -- Language server to use when `lsp` command is executed without args
@@ -271,6 +277,7 @@ settings = {
         typescript = languageServer.tsserver,
         yaml       = languageServer.yamlLs,
         zig        = languageServer.zls,
+        typst      = languageServer.tinymist,
     },
 
     -- Set to true to disable all LSP features in buffers with 'unknown' filetype
