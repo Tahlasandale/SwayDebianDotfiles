@@ -143,3 +143,7 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # Added by Antigravity CLI installer
 export PATH="/home/bison/.local/bin:$PATH"
 export PATH=$PATH:/usr/games
+
+# Java OpenJDK (IntelliJ)
+export JAVA_HOME="$HOME/.jdks/openjdk-27"
+export PATH="$JAVA_HOME/bin:$PATH"

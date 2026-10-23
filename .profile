@@ -34,3 +34,7 @@ fi
 
 # Added by Antigravity CLI installer
 export PATH="/home/bison/.local/bin:$PATH"
+
+# Java OpenJDK (IntelliJ)
+export JAVA_HOME="$HOME/.jdks/openjdk-27"
+export PATH="$JAVA_HOME/bin:$PATH"
