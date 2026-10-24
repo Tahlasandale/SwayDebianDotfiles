@@ -1,6 +1,6 @@
 --- markdown-autocomplete.lua.orig	2026-10-05 22:56:49.067887022 +0200
-+++ markdown-autocomplete.lua	2026-10-24 15:44:12.938354267 +0200
-@@ -71,21 +71,26 @@
++++ markdown-autocomplete.lua	2026-10-24 16:30:05.742444885 +0200
+@@ -71,21 +71,33 @@
      return -bp.Cursor.Loc
  end
  
@@ -23,6 +23,13 @@
 +    { trigger = "[", insert = "[]()", description = "Link", cursorOffset = 3, option = "enableFormatting" }
  }
  
++local typstPatterns = {
++    { trigger = "**", insert = "**", description = "Bold text", cursorOffset = 1, skipIfNext = "*", skipIfOpenedBefore = true, option = "enableFormatting" },
++    { trigger = "__", insert = "__", description = "Italic text", cursorOffset = 1, skipIfNext = "_", skipIfOpenedBefore = true, option = "enableFormatting" },
++    { trigger = "$", insert = "$$", description = "Math formula", cursorOffset = 1, skipIfNext = "$", option = "enableFormatting" },
++    { trigger = "`", insert = "``", description = "Inline code", cursorOffset = 1, skipIfNext = "`", onlyInlineContext = true, option = "enableFormatting" }
++}
++
 +local fencePattern = { insert = "```\n\n```", description = "Code block", cursorOffset = 4, option = "enableCodeBlocks" }
 +
  local autoPairs = {
@@ -35,7 +42,7 @@
  }
  
  local function isMarkdownFile(bp)
-@@ -100,6 +105,33 @@
+@@ -100,6 +112,33 @@
      return false
  end
  
@@ -69,7 +76,7 @@
  local function shouldSkipCompletion(bp, pattern, triggerLen)
      local cursor = bp.Cursor
      local line = bp.Buf:Line(cursor.Y)
-@@ -107,7 +139,17 @@
+@@ -107,7 +146,17 @@
      if pattern.skipIfNext then
          local ahead = string.sub(line, column + 1, column + #pattern.skipIfNext)
          if ahead == pattern.skipIfNext then
@@ -88,7 +95,7 @@
          end
      end
      if pattern.requireLineStart then
-@@ -116,9 +158,38 @@
+@@ -116,11 +165,45 @@
              return true
          end
      end
@@ -125,12 +132,21 @@
 +end
 +
  local function detectPattern(bp)
-     if not isMarkdownFile(bp) then
+-    if not isMarkdownFile(bp) then
++    local activePatterns = nil
++    if isMarkdownFile(bp) then
++        activePatterns = patterns
++    elseif isTypstFile(bp) then
++        activePatterns = typstPatterns
++    else
          return nil
-@@ -129,6 +200,15 @@
+     end
+     local cursor = bp.Cursor
+@@ -129,15 +212,30 @@
      if column == 0 then
          return nil
      end
+-    for _, pattern in ipairs(patterns) do
 +    -- Three or more backticks open a code fence. The whole run is matched and
 +    -- replaced, otherwise the closing backtick of an inline code pair would be
 +    -- left in front of the fence.
@@ -140,10 +156,10 @@
 +            return fencePattern, run
 +        end
 +    end
-     for _, pattern in ipairs(patterns) do
++    for _, pattern in ipairs(activePatterns) do
          if not pattern.option or getOption(pattern.option) then
              local triggerLen = #pattern.trigger
-@@ -136,8 +216,14 @@
+             if column >= triggerLen then
                  local startPos = column - triggerLen + 1
                  if startPos >= 1 then
                      local snippet = string.sub(line, startPos, column)
@@ -160,7 +176,7 @@
                      end
                  end
              end
-@@ -157,19 +243,73 @@
+@@ -157,19 +255,73 @@
      end
  end
  
@@ -238,12 +254,10 @@
          end
      end
  end
-@@ -283,21 +423,84 @@
+@@ -283,21 +435,82 @@
      micro.InfoBar():Message(table.concat(parts, ", "))
  end
  
--function onRune(bp, rune)
--    if not isMarkdownFile(bp) then
 +-- The link and image snippets expand to "[]()" / "![]()". Typing the closing "]" by
 +-- hand must not leave a stray bracket, and it should move the cursor to the place
 +-- the target belongs, so "[", "label", "]" puts the cursor between the parentheses.
@@ -272,35 +286,32 @@
 +            end
 +            cursor:Right()
 +        end
-         return true
-     end
--    local pattern, triggerLen = detectPattern(bp)
--    if pattern then
--        insertCompletion(bp, pattern, triggerLen)
++        return true
++    end
 +    return false
 +end
 +
-+function onRune(bp, rune)
-+    if isMarkdownFile(bp) then
-+        local pattern, triggerLen, action = detectPattern(bp)
-+        if pattern then
-+            if action == "close" then
-+                closeTrigger(bp, triggerLen)
-+            else
-+                insertCompletion(bp, pattern, triggerLen)
-+            end
-+            return true
-+        end
-+        if handleSnippetCloser(bp, rune) then
-+            return true
-+        end
-+        handleAutoPair(bp, rune)
-+        return true
-+    elseif isTypstFile(bp) then
-+        handleAutoPair(bp, rune)
+ function onRune(bp, rune)
+-    if not isMarkdownFile(bp) then
++    if not isMarkdownFile(bp) and not isTypstFile(bp) then
          return true
      end
--    handleAutoPair(bp, rune)
+-    local pattern, triggerLen = detectPattern(bp)
++
++    local pattern, triggerLen, action = detectPattern(bp)
+     if pattern then
+-        insertCompletion(bp, pattern, triggerLen)
++        if action == "close" then
++            closeTrigger(bp, triggerLen)
++        else
++            insertCompletion(bp, pattern, triggerLen)
++        end
++        return true
++    end
++    if isMarkdownFile(bp) and handleSnippetCloser(bp, rune) then
+         return true
+     end
+     handleAutoPair(bp, rune)
      return true
  end
  

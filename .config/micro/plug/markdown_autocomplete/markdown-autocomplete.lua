@@ -84,6 +84,13 @@ local patterns = {
     { trigger = "[", insert = "[]()", description = "Link", cursorOffset = 3, option = "enableFormatting" }
 }
 
+local typstPatterns = {
+    { trigger = "**", insert = "**", description = "Bold text", cursorOffset = 1, skipIfNext = "*", skipIfOpenedBefore = true, option = "enableFormatting" },
+    { trigger = "__", insert = "__", description = "Italic text", cursorOffset = 1, skipIfNext = "_", skipIfOpenedBefore = true, option = "enableFormatting" },
+    { trigger = "$", insert = "$$", description = "Math formula", cursorOffset = 1, skipIfNext = "$", option = "enableFormatting" },
+    { trigger = "`", insert = "``", description = "Inline code", cursorOffset = 1, skipIfNext = "`", onlyInlineContext = true, option = "enableFormatting" }
+}
+
 local fencePattern = { insert = "```\n\n```", description = "Code block", cursorOffset = 4, option = "enableCodeBlocks" }
 
 local autoPairs = {
@@ -191,7 +198,12 @@ local function backtickRun(bp)
 end
 
 local function detectPattern(bp)
-    if not isMarkdownFile(bp) then
+    local activePatterns = nil
+    if isMarkdownFile(bp) then
+        activePatterns = patterns
+    elseif isTypstFile(bp) then
+        activePatterns = typstPatterns
+    else
         return nil
     end
     local cursor = bp.Cursor
@@ -209,7 +221,7 @@ local function detectPattern(bp)
             return fencePattern, run
         end
     end
-    for _, pattern in ipairs(patterns) do
+    for _, pattern in ipairs(activePatterns) do
         if not pattern.option or getOption(pattern.option) then
             local triggerLen = #pattern.trigger
             if column >= triggerLen then
@@ -457,25 +469,23 @@ local function handleSnippetCloser(bp, rune)
 end
 
 function onRune(bp, rune)
-    if isMarkdownFile(bp) then
-        local pattern, triggerLen, action = detectPattern(bp)
-        if pattern then
-            if action == "close" then
-                closeTrigger(bp, triggerLen)
-            else
-                insertCompletion(bp, pattern, triggerLen)
-            end
-            return true
-        end
-        if handleSnippetCloser(bp, rune) then
-            return true
-        end
-        handleAutoPair(bp, rune)
-        return true
-    elseif isTypstFile(bp) then
-        handleAutoPair(bp, rune)
+    if not isMarkdownFile(bp) and not isTypstFile(bp) then
         return true
     end
+
+    local pattern, triggerLen, action = detectPattern(bp)
+    if pattern then
+        if action == "close" then
+            closeTrigger(bp, triggerLen)
+        else
+            insertCompletion(bp, pattern, triggerLen)
+        end
+        return true
+    end
+    if isMarkdownFile(bp) and handleSnippetCloser(bp, rune) then
+        return true
+    end
+    handleAutoPair(bp, rune)
     return true
 end
 

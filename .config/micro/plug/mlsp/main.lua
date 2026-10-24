@@ -877,22 +877,16 @@ function completionAction(bufpane)
             local completions = {}
             local labels = {}
             for i, item in ipairs(completionitems) do
+                local candidate = item.filterText or item.label
                 -- discard completions that don't start with the stem under cursor
-                if string.startsWith(item.filterText or item.label, stem) then
+                if string.startsWith(candidate, stem) then
                     if i > 1 and completionitems[i-1].label == item.label then
                         -- skip duplicate
-                    elseif item.insertTextFormat == InsertTextFormat.Snippet then
-                        -- TODO: support snippets
-                    elseif item.additionalTextEdits then
-                        -- TODO: support additionalTextEdits (eg. adding an import on autocomplete)
                     else
-                        -- TODO: support item.textEdit
-                        -- TODO: item.labelDetails.detail should be shown in faint color after the label
-
                         table.insert(labels, item.label)
 
-                        local insertText = item.insertText or item.label
-                        insertText = insertText:gsub("^" .. stem, "")
+                        local fullText = item.label
+                        local insertText = string.sub(fullText, #stem + 1)
                         table.insert(completions, insertText)
                     end
                 end
