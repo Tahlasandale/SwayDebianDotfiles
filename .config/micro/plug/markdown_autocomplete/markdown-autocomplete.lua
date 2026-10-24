@@ -489,26 +489,6 @@ function onRune(bp, rune)
     return true
 end
 
-function preBackspace(bp)
-    if not isMarkdownFile(bp) and not isTypstFile(bp) then
-        return false
-    end
-    if not getOption("enableAutoPairs") then
-        return false
-    end
-    local cursor = bp.Cursor
-    local line = bp.Buf:Line(cursor.Y)
-    local prevChar = string.sub(line, cursor.X, cursor.X)
-    local nextChar = string.sub(line, cursor.X + 1, cursor.X + 1)
-    for _, pair in ipairs(autoPairs) do
-        if prevChar == pair.open and nextChar == pair.close then
-            bp:Delete()
-            return false
-        end
-    end
-    return false
-end
-
 function onInsertNewline(bp)
     if not isListSupportedFile(bp) then
         return true

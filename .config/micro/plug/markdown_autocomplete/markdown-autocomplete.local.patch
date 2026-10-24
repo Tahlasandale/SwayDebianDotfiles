@@ -1,5 +1,5 @@
 --- markdown-autocomplete.lua.orig	2026-10-05 22:56:49.067887022 +0200
-+++ markdown-autocomplete.lua	2026-10-24 16:30:05.742444885 +0200
++++ markdown-autocomplete.lua	2026-10-24 16:51:16.554486719 +0200
 @@ -71,21 +71,33 @@
      return -bp.Cursor.Loc
  end
@@ -254,7 +254,7 @@
          end
      end
  end
-@@ -283,21 +435,82 @@
+@@ -283,13 +435,54 @@
      micro.InfoBar():Message(table.concat(parts, ", "))
  end
  
@@ -312,29 +312,9 @@
          return true
      end
      handleAutoPair(bp, rune)
-     return true
+@@ -297,7 +490,7 @@
  end
  
-+function preBackspace(bp)
-+    if not isMarkdownFile(bp) and not isTypstFile(bp) then
-+        return false
-+    end
-+    if not getOption("enableAutoPairs") then
-+        return false
-+    end
-+    local cursor = bp.Cursor
-+    local line = bp.Buf:Line(cursor.Y)
-+    local prevChar = string.sub(line, cursor.X, cursor.X)
-+    local nextChar = string.sub(line, cursor.X + 1, cursor.X + 1)
-+    for _, pair in ipairs(autoPairs) do
-+        if prevChar == pair.open and nextChar == pair.close then
-+            bp:Delete()
-+            return false
-+        end
-+    end
-+    return false
-+end
-+
  function onInsertNewline(bp)
 -    if not isMarkdownFile(bp) then
 +    if not isListSupportedFile(bp) then
