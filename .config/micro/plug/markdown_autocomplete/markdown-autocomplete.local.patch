@@ -1,6 +1,6 @@
 --- markdown-autocomplete.lua.orig	2026-10-05 22:56:49.067887022 +0200
-+++ markdown-autocomplete.lua	2026-10-23 14:56:41.999904028 +0200
-@@ -71,21 +71,25 @@
++++ markdown-autocomplete.lua	2026-10-24 15:44:12.938354267 +0200
+@@ -71,21 +71,26 @@
      return -bp.Cursor.Loc
  end
  
@@ -30,14 +30,27 @@
      { open = "{", close = "}" },
 -    { open = "\"", close = "\"" },
 -    { open = "'", close = "'" }
++    { open = "[", close = "]" },
 +    { open = "\"", close = "\"" }
  }
  
  local function isMarkdownFile(bp)
-@@ -100,6 +104,21 @@
+@@ -100,6 +105,33 @@
      return false
  end
  
++local function isTypstFile(bp)
++    local ft = bp.Buf:FileType()
++    if ft == "typst" then
++        return true
++    end
++    local name = bp.Buf:GetName()
++    if name and name:match("%.typ$") then
++        return true
++    end
++    return false
++end
++
 +local function isListSupportedFile(bp)
 +    local ft = bp.Buf:FileType()
 +    if ft == "markdown" or ft == "md" or ft == "typst" then
@@ -56,7 +69,7 @@
  local function shouldSkipCompletion(bp, pattern, triggerLen)
      local cursor = bp.Cursor
      local line = bp.Buf:Line(cursor.Y)
-@@ -107,7 +126,17 @@
+@@ -107,7 +139,17 @@
      if pattern.skipIfNext then
          local ahead = string.sub(line, column + 1, column + #pattern.skipIfNext)
          if ahead == pattern.skipIfNext then
@@ -75,7 +88,7 @@
          end
      end
      if pattern.requireLineStart then
-@@ -116,9 +145,38 @@
+@@ -116,9 +158,38 @@
              return true
          end
      end
@@ -114,7 +127,7 @@
  local function detectPattern(bp)
      if not isMarkdownFile(bp) then
          return nil
-@@ -129,6 +187,15 @@
+@@ -129,6 +200,15 @@
      if column == 0 then
          return nil
      end
@@ -130,7 +143,7 @@
      for _, pattern in ipairs(patterns) do
          if not pattern.option or getOption(pattern.option) then
              local triggerLen = #pattern.trigger
-@@ -136,8 +203,14 @@
+@@ -136,8 +216,14 @@
                  local startPos = column - triggerLen + 1
                  if startPos >= 1 then
                      local snippet = string.sub(line, startPos, column)
@@ -147,7 +160,7 @@
                      end
                  end
              end
-@@ -157,19 +230,73 @@
+@@ -157,19 +243,73 @@
      end
  end
  
@@ -225,10 +238,12 @@
          end
      end
  end
-@@ -283,13 +410,53 @@
+@@ -283,21 +423,84 @@
      micro.InfoBar():Message(table.concat(parts, ", "))
  end
  
+-function onRune(bp, rune)
+-    if not isMarkdownFile(bp) then
 +-- The link and image snippets expand to "[]()" / "![]()". Typing the closing "]" by
 +-- hand must not leave a stray bracket, and it should move the cursor to the place
 +-- the target belongs, so "[", "label", "]" puts the cursor between the parentheses.
@@ -257,33 +272,58 @@
 +            end
 +            cursor:Right()
 +        end
+         return true
+     end
+-    local pattern, triggerLen = detectPattern(bp)
+-    if pattern then
+-        insertCompletion(bp, pattern, triggerLen)
++    return false
++end
++
++function onRune(bp, rune)
++    if isMarkdownFile(bp) then
++        local pattern, triggerLen, action = detectPattern(bp)
++        if pattern then
++            if action == "close" then
++                closeTrigger(bp, triggerLen)
++            else
++                insertCompletion(bp, pattern, triggerLen)
++            end
++            return true
++        end
++        if handleSnippetCloser(bp, rune) then
++            return true
++        end
++        handleAutoPair(bp, rune)
 +        return true
++    elseif isTypstFile(bp) then
++        handleAutoPair(bp, rune)
+         return true
+     end
+-    handleAutoPair(bp, rune)
+     return true
+ end
+ 
++function preBackspace(bp)
++    if not isMarkdownFile(bp) and not isTypstFile(bp) then
++        return false
++    end
++    if not getOption("enableAutoPairs") then
++        return false
++    end
++    local cursor = bp.Cursor
++    local line = bp.Buf:Line(cursor.Y)
++    local prevChar = string.sub(line, cursor.X, cursor.X)
++    local nextChar = string.sub(line, cursor.X + 1, cursor.X + 1)
++    for _, pair in ipairs(autoPairs) do
++        if prevChar == pair.open and nextChar == pair.close then
++            bp:Delete()
++            return false
++        end
 +    end
 +    return false
 +end
 +
- function onRune(bp, rune)
-     if not isMarkdownFile(bp) then
-         return true
-     end
--    local pattern, triggerLen = detectPattern(bp)
-+    local pattern, triggerLen, action = detectPattern(bp)
-     if pattern then
--        insertCompletion(bp, pattern, triggerLen)
-+        if action == "close" then
-+            closeTrigger(bp, triggerLen)
-+        else
-+            insertCompletion(bp, pattern, triggerLen)
-+        end
-+        return true
-+    end
-+    if handleSnippetCloser(bp, rune) then
-         return true
-     end
-     handleAutoPair(bp, rune)
-@@ -297,7 +464,7 @@
- end
- 
  function onInsertNewline(bp)
 -    if not isMarkdownFile(bp) then
 +    if not isListSupportedFile(bp) then

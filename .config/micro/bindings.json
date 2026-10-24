@@ -11,5 +11,6 @@
     "CtrlSpace": "command:lsp autocomplete",
     "CtrlUnderscore": "lua:comment.comment",
     "F2": "command:tree",
-    "F5": "command:wc"
+    "F5": "command:wc",
+    "Tab": "lua:initlua.smartTab"
 }

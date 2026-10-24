@@ -12,6 +12,37 @@ function init()
     micro.SetStatusInfoFn("initlua.wordcount")
 end
 
+function smartTab(bp)
+    if bp.Cursor:HasSelection() then
+        bp:IndentSelection()
+        return
+    end
+
+    local cursor = bp.Cursor
+    local line = bp.Buf:Line(cursor.Y)
+    local col = cursor.X
+    local textBefore = string.sub(line, 1, col)
+
+    if textBefore:match("^%s*$") then
+        bp:InsertTab()
+        return
+    end
+
+    if bp.Buf.HasSuggestions then
+        bp:Autocomplete()
+        return
+    end
+
+    local ft = bp.Buf:FileType()
+    if ft == "typst" then
+        bp:HandleCommand("lsp autocomplete")
+    else
+        if not bp:Autocomplete() then
+            bp:InsertTab()
+        end
+    end
+end
+
 function wordcount(b)
     local text = util.String(b:Bytes())
     local _, words = text:gsub("%S+", "")

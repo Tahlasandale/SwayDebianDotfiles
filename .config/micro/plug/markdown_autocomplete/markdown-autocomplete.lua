@@ -89,6 +89,7 @@ local fencePattern = { insert = "```\n\n```", description = "Code block", cursor
 local autoPairs = {
     { open = "(", close = ")" },
     { open = "{", close = "}" },
+    { open = "[", close = "]" },
     { open = "\"", close = "\"" }
 }
 
@@ -99,6 +100,18 @@ local function isMarkdownFile(bp)
     end
     local name = bp.Buf:GetName()
     if name and (name:match("%.md$") or name:match("%.markdown$")) then
+        return true
+    end
+    return false
+end
+
+local function isTypstFile(bp)
+    local ft = bp.Buf:FileType()
+    if ft == "typst" then
+        return true
+    end
+    local name = bp.Buf:GetName()
+    if name and name:match("%.typ$") then
         return true
     end
     return false
@@ -444,23 +457,46 @@ local function handleSnippetCloser(bp, rune)
 end
 
 function onRune(bp, rune)
-    if not isMarkdownFile(bp) then
-        return true
-    end
-    local pattern, triggerLen, action = detectPattern(bp)
-    if pattern then
-        if action == "close" then
-            closeTrigger(bp, triggerLen)
-        else
-            insertCompletion(bp, pattern, triggerLen)
+    if isMarkdownFile(bp) then
+        local pattern, triggerLen, action = detectPattern(bp)
+        if pattern then
+            if action == "close" then
+                closeTrigger(bp, triggerLen)
+            else
+                insertCompletion(bp, pattern, triggerLen)
+            end
+            return true
         end
+        if handleSnippetCloser(bp, rune) then
+            return true
+        end
+        handleAutoPair(bp, rune)
+        return true
+    elseif isTypstFile(bp) then
+        handleAutoPair(bp, rune)
         return true
     end
-    if handleSnippetCloser(bp, rune) then
-        return true
-    end
-    handleAutoPair(bp, rune)
     return true
+end
+
+function preBackspace(bp)
+    if not isMarkdownFile(bp) and not isTypstFile(bp) then
+        return false
+    end
+    if not getOption("enableAutoPairs") then
+        return false
+    end
+    local cursor = bp.Cursor
+    local line = bp.Buf:Line(cursor.Y)
+    local prevChar = string.sub(line, cursor.X, cursor.X)
+    local nextChar = string.sub(line, cursor.X + 1, cursor.X + 1)
+    for _, pair in ipairs(autoPairs) do
+        if prevChar == pair.open and nextChar == pair.close then
+            bp:Delete()
+            return false
+        end
+    end
+    return false
 end
 
 function onInsertNewline(bp)
