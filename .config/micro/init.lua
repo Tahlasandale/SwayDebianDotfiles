@@ -8,6 +8,35 @@ local micro = import("micro")
 local util = import("micro/util")
 local utf8 = import("unicode/utf8")
 
+local typstWords = {
+    "align", "assert", "bibliography", "block", "box", "calc", "circle", "cite",
+    "colbreak", "columns", "counter", "datetime", "document", "ellipse", "emph",
+    "eval", "figure", "footnote", "grid", "heading", "highlight", "image", "import",
+    "include", "layout", "line", "linebreak", "link", "list", "lorem", "measure",
+    "metadata", "move", "numbering", "outline", "pad", "page", "pagebreak", "panic",
+    "par", "parbreak", "path", "place", "polygon", "query", "quote", "raw", "rect",
+    "ref", "regex", "repeat", "return", "rotate", "scale", "selector", "set",
+    "show", "square", "stack", "state", "strike", "strong", "table", "text",
+    "underline", "v", "h", "pause", "slide", "focus-slide", "header", "footer"
+}
+
+local function completeTypstFallback(bp, stem)
+    local completions = {}
+    local labels = {}
+    for _, word in ipairs(typstWords) do
+        if string.find(word, stem, 1, true) == 1 then
+            table.insert(labels, word)
+            table.insert(completions, string.sub(word, #stem + 1))
+        end
+    end
+    if #completions > 0 then
+        local completer = function() return completions, labels end
+        bp.Buf:Autocomplete(completer)
+        return true
+    end
+    return false
+end
+
 function init()
     micro.SetStatusInfoFn("initlua.wordcount")
 end
@@ -35,7 +64,20 @@ function smartTab(bp)
 
     local ft = bp.Buf:FileType()
     if ft == "typst" then
-        bp:HandleCommand("lsp autocomplete")
+        local wordbytes, _ = bp.Buf:GetWord()
+        local stem = util.String(wordbytes)
+
+        -- Si précédé de #, interroger le serveur LSP en priorité
+        if textBefore:match("#[%w_-]*$") then
+            bp:HandleCommand("lsp autocomplete")
+        else
+            -- Si tapé sans # (ex: "pagebreak", "outline"), compléter directement via le dictionnaire Typst
+            if not completeTypstFallback(bp, stem) then
+                if not bp:Autocomplete() then
+                    bp:InsertTab()
+                end
+            end
+        end
     else
         if not bp:Autocomplete() then
             bp:InsertTab()
