@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# typst-watch: Compile et surveille un fichier Typst avec aperçu en direct dans Zathura.
+# Usage:
+#   typst-watch [fichier.typ]
+#   tw [fichier.typ]
+
+set -uo pipefail
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+    echo "Usage: $(basename "$0") [fichier.typ]"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help    Affiche cette aide"
+    echo ""
+    echo "Si aucun fichier n'est spécifié, détecte automatiquement le fichier .typ"
+    echo "unique dans le répertoire courant."
+    exit 0
+fi
+
+TARGET="${1:-}"
+
+# Détection automatique si aucun argument n'est fourni
+if [[ -z "$TARGET" ]]; then
+    shopt -s nullglob
+    TYP_FILES=(*.typ)
+    shopt -u nullglob
+
+    if [[ ${#TYP_FILES[@]} -eq 1 ]]; then
+        TARGET="${TYP_FILES[0]}"
+        echo -e "\e[1;34m[typst-watch]\e[0m Fichier unique détecté : \e[1;32m$TARGET\e[0m"
+    elif [[ ${#TYP_FILES[@]} -eq 0 ]]; then
+        echo -e "\e[1;31m[Erreur]\e[0m Aucun fichier .typ spécifié ni trouvé dans le répertoire courant." >&2
+        echo "Usage: $(basename "$0") [fichier.typ]" >&2
+        exit 1
+    else
+        echo -e "\e[1;33m[typst-watch]\e[0m Plusieurs fichiers .typ trouvés dans le répertoire courant :" >&2
+        for f in "${TYP_FILES[@]}"; do
+            echo "  - $f" >&2
+        done
+        echo "Veuillez spécifier le fichier cible, ex : $(basename "$0") ${TYP_FILES[0]}" >&2
+        exit 1
+    fi
+fi
+
+# Résolution si l'extension .typ a été omise
+if [[ ! -f "$TARGET" && -f "${TARGET}.typ" ]]; then
+    TARGET="${TARGET}.typ"
+fi
+
+if [[ ! -f "$TARGET" ]]; then
+    echo -e "\e[1;31m[Erreur]\e[0m Le fichier '$TARGET' n'existe pas." >&2
+    exit 1
+fi
+
+if [[ "$TARGET" != *.typ ]]; then
+    echo -e "\e[1;33m[Avertissement]\e[0m '$TARGET' n'a pas l'extension .typ." >&2
+    PDF="${TARGET}.pdf"
+else
+    PDF="${TARGET%.typ}.pdf"
+fi
+
+# Compilation initiale pour garantir que le fichier PDF existe avant d'ouvrir Zathura
+echo -e "\e[1;34m[typst-watch]\e[0m Compilation initiale de \e[1m$TARGET\e[0m vers \e[1m$PDF\e[0m..."
+if ! typst compile "$TARGET" "$PDF"; then
+    echo -e "\e[1;33m[typst-watch]\e[0m Avertissement : échec de compilation initiale." >&2
+    if [[ ! -f "$PDF" ]]; then
+        echo -e "\e[1;34m[typst-watch]\e[0m Création d'un PDF temporaire pour Zathura..."
+        echo "" | typst compile - "$PDF" 2>/dev/null || true
+    fi
+fi
+
+# Démarrage de typst watch en arrière-plan
+typst watch "$TARGET" "$PDF" &
+TYPST_PID=$!
+
+# Fonction de nettoyage propre
+cleanup() {
+    trap - EXIT INT TERM HUP
+    echo -e "\n\e[1;34m[typst-watch]\e[0m Arrêt des processus..."
+    if [[ -n "${TYPST_PID:-}" ]] && kill -0 "$TYPST_PID" 2>/dev/null; then
+        kill "$TYPST_PID" 2>/dev/null || true
+    fi
+    if [[ -n "${ZATHURA_PID:-}" ]] && kill -0 "$ZATHURA_PID" 2>/dev/null; then
+        kill "$ZATHURA_PID" 2>/dev/null || true
+    fi
+}
+trap cleanup EXIT INT TERM HUP
+
+# Lancement de Zathura
+if command -v zathura >/dev/null 2>&1; then
+    zathura "$PDF" >/dev/null 2>&1 &
+    ZATHURA_PID=$!
+    echo -e "\e[1;32m[typst-watch]\e[0m Zathura ouvert ($PDF). Fermez Zathura ou faites Ctrl+C pour quitter."
+    wait "$ZATHURA_PID" 2>/dev/null || true
+else
+    echo -e "\e[1;31m[Erreur]\e[0m Zathura n'est pas installé. typst watch reste actif." >&2
+    wait "$TYPST_PID" 2>/dev/null || true
+fi
