@@ -6,6 +6,6 @@
         "https://raw.githubusercontent.com/dalekirkwood/markdown-autocomplete/main/repo.json"
     ],
     "statusformatl": "$(filename) $(modified)($(line),$(col)) | $(initlua.wordcount)",
-    "autosave": 5,
+    "autosave": 1,
     "reload": "auto"
 }
