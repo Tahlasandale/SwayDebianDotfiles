@@ -868,24 +868,90 @@ function completionAction(bufpane)
             local wordbytes, _ = buf:GetWord()
             local stem = util.String(wordbytes)
 
-            ---@enum InsertTextFormat
-            local InsertTextFormat = {
-                PlainText = 1,
-                Snippet = 2,
+            local function cleanSnippet(text)
+                if not text then return "" end
+                local res = text:gsub("%${%d+:(.-)}", "%1")
+                res = res:gsub("%$%d+", "")
+                res = res:gsub("%${%d+}", "")
+                return res
+            end
+
+            local isTypst = (buf:FileType() == "typst")
+
+            local typstBoth = {
+                align = true, pad = true, move = true, rotate = true, scale = true,
+                place = true, figure = true, quote = true, slide = true, ["focus-slide"] = true
+            }
+
+            local typstBrackets = {
+                highlight = true, underline = true, strike = true, emph = true,
+                strong = true, footnote = true
+            }
+
+            local typstParens = {
+                pagebreak = true, colbreak = true, linebreak = true, parbreak = true,
+                outline = true, table = true, grid = true, image = true, link = true,
+                cite = true, bibliography = true, counter = true, state = true,
+                datetime = true, lorem = true, panic = true, assert = true, eval = true,
+                query = true, selector = true, measure = true, metadata = true, regex = true,
+                repeat = true, stack = true, layout = true, numbering = true, document = true
+            }
+
+            local typstFlex = {
+                block = true, box = true, heading = true, text = true,
+                rect = true, circle = true, square = true, ellipse = true
             }
 
             local completions = {}
             local labels = {}
-            for i, item in ipairs(completionitems) do
-                local candidate = item.filterText or item.label
-                -- discard completions that don't start with the stem under cursor
-                if string.startsWith(candidate, stem) then
-                    if i > 1 and completionitems[i-1].label == item.label then
-                        -- skip duplicate
-                    else
-                        table.insert(labels, item.label)
+            local seen = {}
 
-                        local fullText = item.label
+            for _, item in ipairs(completionitems) do
+                local baseName = item.label:match("^([%w_-]+)") or item.label
+                local candidate = item.filterText or baseName
+
+                if string.startsWith(candidate, stem) or string.startsWith(baseName, stem) then
+                    local raw = nil
+                    if type(item.textEdit) == "table" and item.textEdit.newText then
+                        raw = item.textEdit.newText
+                    elseif item.insertText and #item.insertText > 0 then
+                        raw = item.insertText
+                    else
+                        raw = item.label
+                    end
+
+                    local fullText = cleanSnippet(raw)
+                    local displayLabel = fullText
+
+                    if isTypst then
+                        local hasParen = (fullText:find("%(") ~= nil)
+                        local hasBracket = (fullText:find("%[") ~= nil)
+                        local isBracketLabel = (item.label:find("%.bracket") ~= nil)
+
+                        if isBracketLabel or (typstBrackets[baseName] and not hasParen) then
+                            fullText = baseName .. "[]"
+                        elseif typstBoth[baseName] then
+                            if hasBracket and not hasParen then
+                                fullText = baseName .. "[]"
+                            else
+                                fullText = baseName .. "()[]"
+                            end
+                        elseif hasParen or hasBracket then
+                            -- Conserver le formatage natif de Tinymist (ex: pagebreak(), block[], import "@")
+                        elseif typstParens[baseName] or item.kind == 3 or item.kind == 2 then
+                            fullText = baseName .. "()"
+                        elseif typstFlex[baseName] then
+                            fullText = baseName .. "[]"
+                        end
+
+                        displayLabel = fullText
+                    else
+                        displayLabel = item.label
+                    end
+
+                    if not seen[fullText] then
+                        seen[fullText] = true
+                        table.insert(labels, displayLabel)
                         local insertText = string.sub(fullText, #stem + 1)
                         table.insert(completions, insertText)
                     end
@@ -896,10 +962,23 @@ function completionAction(bufpane)
                 -- fall back to micro's built-in completer
                 bufpane:Autocomplete()
             else
-                -- turn completions into Completer function for micro
-                -- https://pkg.go.dev/github.com/zyedidia/micro/v2/internal/buffer#Completer
                 local completer = function() return completions, labels end
                 buf:Autocomplete(completer)
+                if #completions == 1 and isTypst then
+                    local cur = buf:GetActiveCursor()
+                    local curLine = buf:Line(cur.Y)
+                    local curCol = cur.X
+                    if curCol >= 4 and curLine:sub(curCol - 3, curCol) == "()[]" then
+                        cur:Left()
+                        cur:Left()
+                        cur:Left()
+                    elseif curCol >= 2 then
+                        local tail = curLine:sub(curCol - 1, curCol)
+                        if tail == "()" or tail == "[]" or tail == '""' then
+                            cur:Left()
+                        end
+                    end
+                end
             end
         end,
         onError = defaultOnErrorHandler(method)

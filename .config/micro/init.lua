@@ -9,29 +9,59 @@ local util = import("micro/util")
 local utf8 = import("unicode/utf8")
 
 local typstWords = {
-    "align", "assert", "bibliography", "block", "box", "calc", "circle", "cite",
-    "colbreak", "columns", "counter", "datetime", "document", "ellipse", "emph",
-    "eval", "figure", "footnote", "grid", "heading", "highlight", "image", "import",
-    "include", "layout", "line", "linebreak", "link", "list", "lorem", "measure",
-    "metadata", "move", "numbering", "outline", "pad", "page", "pagebreak", "panic",
-    "par", "parbreak", "path", "place", "polygon", "query", "quote", "raw", "rect",
-    "ref", "regex", "repeat", "return", "rotate", "scale", "selector", "set",
-    "show", "square", "stack", "state", "strike", "strong", "table", "text",
-    "underline", "v", "h", "pause", "slide", "focus-slide", "header", "footer"
+    -- Fonctions avec options ET contenu ()[]
+    "align()[]", "figure()[]", "move()[]", "pad()[]", "place()[]",
+    "quote()[]", "rotate()[]", "scale()[]", "slide()[]", "focus-slide()[]",
+
+    -- Fonctions de contenu avec crochets []
+    "block[]", "block()", "box[]", "box()", "heading[]", "heading()",
+    "highlight[]", "underline[]", "strike[]", "emph[]", "strong[]",
+    "footnote[]", "rect[]", "rect()", "circle[]", "circle()",
+    "square[]", "square()", "ellipse[]", "ellipse()", "text[]", "text()[]",
+
+    -- Fonctions avec parenthèses ()
+    "assert()", "bibliography()", "calc", "cite()", "colbreak()",
+    "columns()", "counter()", "datetime()", "document()", "eval()",
+    "grid()", "image()", "import", "include", "layout()", "line()",
+    "linebreak()", "link()", "list()", "lorem()", "measure()",
+    "metadata()", "numbering()", "outline()", "page()", "pagebreak()",
+    "panic()", "par()", "parbreak()", "path()", "polygon()", "query()",
+    "raw()", "ref()", "regex()", "repeat()", "return", "selector()",
+    "set", "show", "stack()", "state()", "table()", "v()", "h()", "pause"
 }
 
 local function completeTypstFallback(bp, stem)
     local completions = {}
     local labels = {}
+    local seen = {}
     for _, word in ipairs(typstWords) do
-        if string.find(word, stem, 1, true) == 1 then
-            table.insert(labels, word)
-            table.insert(completions, string.sub(word, #stem + 1))
+        local base = word:match("^([%w_-]+)")
+        if base and string.find(base, stem, 1, true) == 1 then
+            if not seen[word] then
+                seen[word] = true
+                table.insert(labels, word)
+                table.insert(completions, string.sub(word, #stem + 1))
+            end
         end
     end
     if #completions > 0 then
         local completer = function() return completions, labels end
         bp.Buf:Autocomplete(completer)
+        if #completions == 1 then
+            local cur = bp.Cursor
+            local curLine = bp.Buf:Line(cur.Y)
+            local curCol = cur.X
+            if curCol >= 4 and curLine:sub(curCol - 3, curCol) == "()[]" then
+                cur:Left()
+                cur:Left()
+                cur:Left()
+            elseif curCol >= 2 then
+                local tail = curLine:sub(curCol - 1, curCol)
+                if tail == "()" or tail == "[]" or tail == '""' then
+                    cur:Left()
+                end
+            end
+        end
         return true
     end
     return false
