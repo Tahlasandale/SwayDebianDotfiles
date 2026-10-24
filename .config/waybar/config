@@ -263,10 +263,11 @@
         "exec": "$HOME/.local/bin/waybar-syncthing.sh",
         "return-type": "json",
         "interval": 3,
+        "signal": 9,
         "format": "{text}",
-        "on-click": "systemctl --user start syncthing.service",
+        "on-click": "$HOME/.local/bin/syncthing-toggle.sh",
         "on-double-click": "xdg-open http://127.0.0.1:8384",
-        "on-click-right": "systemctl --user stop syncthing.service"
+        "on-click-right": "systemctl --user stop syncthing.service; killall syncthing 2>/dev/null || true; pkill -RTMIN+9 waybar 2>/dev/null || true"
     },
     "custom/megasync": {
         "exec": "$HOME/.local/bin/waybar-megasync.sh",

@@ -32,4 +32,4 @@ if is_sway_session; then
     done
 fi
 
-exec /home/bison/.local/bin/syncthing serve
+exec /home/bison/.local/bin/syncthing serve --no-browser --no-restart
