@@ -151,6 +151,17 @@ button:hover {
     color: @green;
 }
 
+#battery:hover {
+    background-color: @surface1;
+    border-radius: 0;
+}
+
+#battery.charging:hover, #battery.plugged:hover {
+    background-color: @teal;
+    color: @crust;
+    border-radius: 0;
+}
+
 #battery.charging, #battery.plugged {
     color: @crust;
     background-color: @green;

@@ -194,13 +194,14 @@
             "critical": 15
         },
         "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-time": "{H}h{M}m",
+        "format-icons": {
+            "charging": [" ", " ", " ", " ", " "],
+            "plugged": "",
+            "default": ["", "", "", "", ""]
+        },
+        "tooltip-format": "{timeTo} ({capacity}%)\nSanté: {health}%\nPuissance: {power} W"
     },
     "battery#bat2": {
         "bat": "BAT2"
