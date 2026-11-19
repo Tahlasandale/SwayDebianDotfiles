@@ -73,7 +73,6 @@ bindsym $mod+exclam exec ~/.local/bin/sway-next-wallpaper.sh
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Voulez-vous quitter Sway ?' -B 'Oui, quitter' 'swaymsg exit'
 
 # Historique du presse-papier façon Windows 11 (Tofi)
-bindsym Control+Shift+v exec ~/.local/bin/cliphist-tofi.sh
 bindsym $mod+Shift+v exec ~/.local/bin/cliphist-tofi.sh
 
 # Capture d'écran avec recadrage façon Windows 11 (Win + Maj + S et Print)

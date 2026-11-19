@@ -2,6 +2,8 @@
 # cliphist-tofi.sh — Menu historique du presse-papier Catppuccin Mocha via tofi
 # Déclenche la recherche floue, copie l'élément sélectionné et le colle automatiquement.
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # Déterminer la fenêtre active AVANT que tofi ne prenne le focus
 focused_app=$(python3 -c "
 import json, subprocess
