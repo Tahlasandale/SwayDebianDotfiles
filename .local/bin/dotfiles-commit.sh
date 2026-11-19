@@ -42,7 +42,7 @@ $GIT add -f \
   ~/.local/bin/waybar-battery.sh ~/.local/bin/waybar-battery-toggle.sh \
   ~/.local/bin/syncthing-toggle.sh ~/.local/bin/syncthing-open-ui.sh ~/.local/bin/syncthing-after-session.sh \
   ~/.config/systemd/user/syncthing.service \
-  ~/.local/bin/cliphist-daemon.sh ~/.local/bin/cliphist-tofi.sh \
+  ~/.local/bin/cliphist-daemon.sh ~/.local/bin/cliphist-tofi.sh ~/.local/bin/sway-focused-info \
   ~/.local/bin/screenshot-area.sh ~/.local/bin/slurp \
   ~/.config/trackmania-sources \
   ~/INVENTORY.md ~/.config/system-sources/packages-apt.txt \
