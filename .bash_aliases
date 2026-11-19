@@ -31,6 +31,10 @@ alias cdd='cd_to_dir'
 # Antigravity CLI
 alias agy-y='agy --dangerously-skip-permissions'
 
+# Claw Code CLI (ultraworkers/claw-code)
+alias claw='/home/bison/claw-code/rust/target/debug/claw'
+alias claw-y='/home/bison/claw-code/rust/target/debug/claw --dangerously-skip-permissions'
+
 # --- Docker a la demande (On-Demand) ---
 docker() {
     if ! systemctl is-active --quiet docker; then

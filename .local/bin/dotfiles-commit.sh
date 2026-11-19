@@ -44,6 +44,8 @@ $GIT add -f \
   ~/.config/systemd/user/syncthing.service \
   ~/.local/bin/cliphist-daemon.sh ~/.local/bin/cliphist-tofi.sh ~/.local/bin/sway-focused-info \
   ~/.local/bin/screenshot-area.sh ~/.local/bin/slurp \
+  ~/.local/bin/claw-y \
+  ~/.claw/settings.json.example \
   ~/.config/trackmania-sources \
   ~/INVENTORY.md ~/.config/system-sources/packages-apt.txt \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \
@@ -55,10 +57,16 @@ $GIT add -f \
   ~/.gitconfig \
   ~/.local/bin/dotfiles-commit.sh
 
-# Garde-fou secrets : abort si l'index contient un chemin sensible
-if $GIT diff --cached --name-only | grep -Ei 'gh/hosts\.yml|kdeconnect|/\.opencode/|opencode\.json|\.pem$|token|secret|/\.dotfiles/' >/dev/null; then
+# Garde-fou secrets : abort si l'index contient un chemin sensible ou une cle privee
+if $GIT diff --cached --name-only | grep -Ei 'gh/hosts\.yml|kdeconnect|/\.opencode/|opencode\.json|/\.claw/settings\.json$|\.pem$|token|secret|/\.dotfiles/' >/dev/null; then
     echo "ABORT : fichier sensible detecte dans l'index :" >&2
-    $GIT diff --cached --name-only | grep -Ei 'gh/hosts\.yml|kdeconnect|/\.opencode/|opencode\.json|\.pem$|token|secret|/\.dotfiles/' >&2
+    $GIT diff --cached --name-only | grep -Ei 'gh/hosts\.yml|kdeconnect|/\.opencode/|opencode\.json|/\.claw/settings\.json$|\.pem$|token|secret|/\.dotfiles/' >&2
+    exit 1
+fi
+
+# Garde-fou contenu : interdiction stricte de cle API DeepSeek / OpenAI
+if $GIT diff --cached -S"sk-" | grep -E '^\+[^+]' | grep -E 'sk-[a-zA-Z0-9]{20,}' >/dev/null; then
+    echo "ABORT : Cle API (sk-...) detectee dans le diff stagé !" >&2
     exit 1
 fi
 
