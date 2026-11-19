@@ -4,6 +4,7 @@
 
 * {
     border: none;
+    border-radius: 0;
     padding: 0px;
     min-height: 0;
     font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Brands", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
@@ -108,15 +109,15 @@ button:hover {
 #clock,
 #custom-power {
     min-width: 12px;
-    padding: 0 4px;
-    margin: 1px 3px;
+    padding: 0 6px;
+    margin: 0;
     color: @text;
 }
 
 #mode {
     background-color: @red;
     color: @crust;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #keyboard-state {
@@ -153,7 +154,7 @@ button:hover {
 #battery.charging, #battery.plugged {
     color: @crust;
     background-color: @green;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 @keyframes blink {
@@ -180,19 +181,19 @@ button:hover {
 #power-profiles-daemon.performance {
     background-color: @red;
     color: @crust;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #power-profiles-daemon.balanced {
     background-color: @blue;
     color: @crust;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #power-profiles-daemon.power-saver {
     background-color: @green;
     color: @crust;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #cpu {
@@ -210,7 +211,7 @@ button:hover {
 #temperature.critical {
     background-color: @red;
     color: @crust;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #backlight {
@@ -223,7 +224,7 @@ button:hover {
 
 #custom-displays:hover {
     background-color: @surface1;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #network {
@@ -233,7 +234,7 @@ button:hover {
 #network.disconnected {
     background-color: @red;
     color: @crust;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #pulseaudio {
@@ -246,7 +247,7 @@ button:hover {
 
 #pulseaudio:hover {
     background-color: @surface1;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #bluetooth {
@@ -264,7 +265,7 @@ button:hover {
 
 #bluetooth:hover {
     background-color: @surface1;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #custom-syncthing {
@@ -282,7 +283,7 @@ button:hover {
 
 #custom-syncthing:hover {
     background-color: @surface1;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #custom-megasync {
@@ -295,7 +296,7 @@ button:hover {
 
 #custom-megasync:hover {
     background-color: @surface1;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #custom-media {
@@ -338,7 +339,7 @@ button:hover {
 #idle_inhibitor.activated {
     background-color: @text;
     color: @base;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 
@@ -354,18 +355,18 @@ button:hover {
     background-color: @red;
     color: @crust;
     padding: 0 10px;
-    margin: 1px 2px 1px 3px;
-    border-radius: 8px;
+    margin: 0;
+    border-radius: 0;
     font-weight: bold;
 }
 
-/* --- Tooltips arrondis --- */
+/* --- Tooltips plats --- */
 tooltip {
     padding: 4px;
     background: @base;
     font-size: 10px;
     border: 1px solid alpha(@text, 0.2);
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 tooltip label {
