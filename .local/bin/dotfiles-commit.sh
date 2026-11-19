@@ -39,6 +39,9 @@ $GIT add -f \
   ~/.config/systemd/user/monoxide.service ~/.config/systemd/user/monoxide.env.example \
   ~/.local/bin/tmnationsforever ~/.local/bin/tmnf ~/.local/bin/tm-backup.sh ~/.local/bin/tm-restore.sh \
   ~/.local/bin/waybar-syncthing.sh ~/.local/bin/waybar-megasync.sh \
+  ~/.local/bin/syncthing-toggle.sh ~/.local/bin/syncthing-open-ui.sh ~/.local/bin/syncthing-after-session.sh \
+  ~/.config/systemd/user/syncthing.service \
+  ~/.local/bin/cliphist-daemon.sh ~/.local/bin/cliphist-tofi.sh \
   ~/.config/trackmania-sources \
   ~/INVENTORY.md ~/.config/system-sources/packages-apt.txt \
   ~/.local/bin/boot-info.sh ~/.local/bin/sway-next-wallpaper.sh \

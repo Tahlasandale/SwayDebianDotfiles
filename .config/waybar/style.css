@@ -13,51 +13,27 @@
 }
 
 window#waybar {
-    background-color: transparent;
+    background-color: @base;
+    border-bottom: 2px solid @surface0;
+    color: @text;
     transition-property: background-color;
     transition-duration: .5s;
 }
 
-/* --- Ilots flottants --- */
-#left1 {
-    border-radius: 16px 0 0 16px;
-    border: 1px solid alpha(@text, 0.1);
-    margin: 0 0 3px 0;
-    background-color: @base;
-    padding-left: 4px;
-}
-
-#left2 {
-    border-radius: 0 16px 16px 0;
-    border: 1px solid alpha(@text, 0.1);
-    margin: 0 0 3px 4px;
-    background-color: @base;
-    padding-right: 8px;
+/* --- Sections de la barre pleine --- */
+#left1, #left2, #right1, #right2 {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
 }
 
 .modules-center {
-    border-radius: 16px;
-    border: 1px solid alpha(@text, 0.1);
-    margin: 0 0 3px 0;
-    background-color: @base;
+    margin: 0;
     padding: 0 10px;
+    background: transparent;
+    border: none;
     color: @subtext1;
-}
-
-#right2 {
-    border-radius: 16px 0 0 16px;
-    border: 1px solid alpha(@text, 0.1);
-    margin: 0 4px 3px 0;
-    background-color: @base;
-    padding-left: 8px;
-}
-
-#right1 {
-    border-radius: 0 16px 16px 0;
-    border: 1px solid alpha(@text, 0.1);
-    margin: 0 0 3px 0;
-    background-color: @base;
-    padding-right: 4px;
 }
 
 /* --- Workspaces (Sway : .focused, pas .active) --- */
@@ -297,6 +273,11 @@ button:hover {
 
 #custom-syncthing.stopped {
     color: @overlay0;
+}
+
+#custom-syncthing.starting,
+#custom-syncthing.stopping {
+    color: @yellow;
 }
 
 #custom-syncthing:hover {

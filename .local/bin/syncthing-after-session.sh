@@ -21,13 +21,9 @@ while [ "$waited" -lt 15 ] && ! is_sway_session; do
     waited=$((waited + 1))
 done
 
-# Sous Sway, attendre la sortie graphique et la levee d'un eventuel verrouillage.
+# Sous Sway, s'assurer que les sorties graphiques sont pretes.
 if is_sway_session; then
     while [ -z "${SWAYSOCK:-}" ] || ! swaymsg -t get_outputs >/dev/null 2>&1; do
-        sleep 1
-    done
-
-    while pgrep -x swaylock >/dev/null 2>&1; do
         sleep 1
     done
 fi

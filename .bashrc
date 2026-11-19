@@ -147,3 +147,7 @@ export PATH=$PATH:/usr/games
 # Java OpenJDK (IntelliJ)
 export JAVA_HOME="$HOME/.jdks/openjdk-27"
 export PATH="$JAVA_HOME/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

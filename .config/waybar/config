@@ -1,15 +1,15 @@
 // -*- mode: jsonc -*-
 {
-    "layer": "top", // Overlay flottant au-dessus des apps
-    "position": "top", // Barre en haut
-    "exclusive": false, // Ne reserve aucun espace : les apps montent jusqu'en haut
+    "layer": "top",
+    "position": "top",
+    "exclusive": true, // Reserve l'espace en haut pour les fenetres Sway
     "height": 30, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "margin-top": 2,
-    "margin-left": 5,
-    "margin-right": 5,
+    "margin-top": 0,
+    "margin-left": 0,
+    "margin-right": 0,
     "margin-bottom": 0,
     "spacing": 0,
     "modules-left": [
@@ -262,12 +262,11 @@
     "custom/syncthing": {
         "exec": "$HOME/.local/bin/waybar-syncthing.sh",
         "return-type": "json",
-        "interval": 3,
+        "interval": 5,
         "signal": 9,
         "format": "{text}",
         "on-click": "$HOME/.local/bin/syncthing-toggle.sh",
-        "on-double-click": "xdg-open http://127.0.0.1:8384",
-        "on-click-right": "systemctl --user stop syncthing.service; killall syncthing 2>/dev/null || true; pkill -RTMIN+9 waybar 2>/dev/null || true"
+        "on-click-right": "$HOME/.local/bin/syncthing-open-ui.sh"
     },
     "custom/megasync": {
         "exec": "$HOME/.local/bin/waybar-megasync.sh",

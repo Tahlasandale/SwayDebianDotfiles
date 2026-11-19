@@ -894,7 +894,7 @@ function completionAction(bufpane)
                 cite = true, bibliography = true, counter = true, state = true,
                 datetime = true, lorem = true, panic = true, assert = true, eval = true,
                 query = true, selector = true, measure = true, metadata = true, regex = true,
-                repeat = true, stack = true, layout = true, numbering = true, document = true
+                ["repeat"] = true, stack = true, layout = true, numbering = true, document = true
             }
 
             local typstFlex = {

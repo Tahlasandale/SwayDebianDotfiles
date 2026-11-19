@@ -25,6 +25,7 @@ default_border pixel 5
 # Clavier en Français (AZERTY)
 input * {
     xkb_layout "fr"
+    xkb_numlock enabled
 }
 
 # Trackpad ELAN : scroll naturel (2 doigts), tap = clic, 2 doigts = clic droit
@@ -54,8 +55,11 @@ exec ~/.local/bin/sway-next-wallpaper.sh
 exec sh -c 'sleep 2; wtype -k Caps_Lock'
 exec mako
 
-# Waybar en overlay flottant (standalone, Sway ne reserve aucun espace)
+# Waybar en barre pleine (exclusive, reserve l'espace pour les fenetres)
 exec waybar
+
+# Demon de surveillance du presse-papier (texte + images pour cliphist)
+exec ~/.local/bin/cliphist-daemon.sh
 
 # --- RACCOURCIS CLAVIER ---
 
@@ -67,6 +71,10 @@ bindsym $mod+space exec $menu
 bindsym $mod+l exec swaylock
 bindsym $mod+exclam exec ~/.local/bin/sway-next-wallpaper.sh
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Voulez-vous quitter Sway ?' -B 'Oui, quitter' 'swaymsg exit'
+
+# Historique du presse-papier façon Windows 11 (Tofi)
+bindsym Control+Shift+v exec ~/.local/bin/cliphist-tofi.sh
+bindsym $mod+Shift+v exec ~/.local/bin/cliphist-tofi.sh
 
 # Déplacer le focus (touches fléchées ou hjkl)
 bindsym $mod+$left focus left
@@ -91,23 +99,34 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# Gestion des Workspaces (Bureaux virtuels 1 à 5)
-# Win+N deplace la fenetre active vers le bureau N ET bascule la vue dessus
-bindsym $mod+1 exec ~/.local/bin/sway-move-to-ws.sh 1
-bindsym $mod+2 exec ~/.local/bin/sway-move-to-ws.sh 2
-bindsym $mod+3 exec ~/.local/bin/sway-move-to-ws.sh 3
-bindsym $mod+4 exec ~/.local/bin/sway-move-to-ws.sh 4
-bindsym $mod+5 exec ~/.local/bin/sway-move-to-ws.sh 5
-
 # Gestures trackpad : 3 doigts = bureau circulaire
 bindgesture swipe:3:left exec ~/.local/bin/sway-cycle-workspace.sh next
 bindgesture swipe:3:right exec ~/.local/bin/sway-cycle-workspace.sh prev
-# Doublons pave numerique (KP_1..KP_5, Verr Num actif)
-bindsym $mod+KP_1 exec ~/.local/bin/sway-move-to-ws.sh 1
-bindsym $mod+KP_2 exec ~/.local/bin/sway-move-to-ws.sh 2
-bindsym $mod+KP_3 exec ~/.local/bin/sway-move-to-ws.sh 3
-bindsym $mod+KP_4 exec ~/.local/bin/sway-move-to-ws.sh 4
-bindsym $mod+KP_5 exec ~/.local/bin/sway-move-to-ws.sh 5
+
+# Gestion des Workspaces (Pavé Numérique 1 à 5)
+# Changer de vue uniquement (Super + Pavé Numérique 1 à 5)
+bindsym $mod+KP_1 workspace number 1
+bindsym $mod+KP_End workspace number 1
+bindsym $mod+KP_2 workspace number 2
+bindsym $mod+KP_Down workspace number 2
+bindsym $mod+KP_3 workspace number 3
+bindsym $mod+KP_Next workspace number 3
+bindsym $mod+KP_4 workspace number 4
+bindsym $mod+KP_Left workspace number 4
+bindsym $mod+KP_5 workspace number 5
+bindsym $mod+KP_Begin workspace number 5
+
+# Déplacer la fenêtre active (Super + Shift + Pavé Numérique 1 à 5)
+bindsym $mod+Shift+KP_1 exec ~/.local/bin/sway-move-to-ws.sh 1
+bindsym $mod+Shift+KP_End exec ~/.local/bin/sway-move-to-ws.sh 1
+bindsym $mod+Shift+KP_2 exec ~/.local/bin/sway-move-to-ws.sh 2
+bindsym $mod+Shift+KP_Down exec ~/.local/bin/sway-move-to-ws.sh 2
+bindsym $mod+Shift+KP_3 exec ~/.local/bin/sway-move-to-ws.sh 3
+bindsym $mod+Shift+KP_Next exec ~/.local/bin/sway-move-to-ws.sh 3
+bindsym $mod+Shift+KP_4 exec ~/.local/bin/sway-move-to-ws.sh 4
+bindsym $mod+Shift+KP_Left exec ~/.local/bin/sway-move-to-ws.sh 4
+bindsym $mod+Shift+KP_5 exec ~/.local/bin/sway-move-to-ws.sh 5
+bindsym $mod+Shift+KP_Begin exec ~/.local/bin/sway-move-to-ws.sh 5
 
 # Mise en page (Layouts)
 bindsym $mod+b splith
