@@ -62,7 +62,7 @@
             "temperature",
             "backlight",
             "custom/displays",
-            "battery",
+            "custom/battery",
             "keyboard-state#num",
             "keyboard-state#caps",
             "clock",
@@ -187,21 +187,13 @@
         "format": "{percent}% {icon}",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-alt": "{time} {icon}",
-        "format-time": "{H}h{M}m",
-        "format-icons": {
-            "charging": [" ", " ", " ", " ", " "],
-            "plugged": "",
-            "default": ["", "", "", "", ""]
-        },
-        "tooltip-format": "{timeTo} ({capacity}%)\nSanté: {health}%\nPuissance: {power} W"
+    "custom/battery": {
+        "exec": "$HOME/.local/bin/waybar-battery.sh",
+        "return-type": "json",
+        "interval": 10,
+        "signal": 8,
+        "format": "{text}",
+        "on-click": "$HOME/.local/bin/waybar-battery-toggle.sh"
     },
     "battery#bat2": {
         "bat": "BAT2"

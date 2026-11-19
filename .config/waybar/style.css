@@ -105,6 +105,7 @@ button:hover {
 #temperature,
 #backlight,
 #custom-displays,
+#custom-battery,
 #battery,
 #clock,
 #custom-power {
@@ -147,21 +148,25 @@ button:hover {
     font-weight: bold;
 }
 
+#custom-battery,
 #battery {
     color: @green;
 }
 
+#custom-battery:hover,
 #battery:hover {
     background-color: @surface1;
     border-radius: 0;
 }
 
+#custom-battery.charging:hover, #custom-battery.plugged:hover,
 #battery.charging:hover, #battery.plugged:hover {
     background-color: @teal;
     color: @crust;
     border-radius: 0;
 }
 
+#custom-battery.charging, #custom-battery.plugged,
 #battery.charging, #battery.plugged {
     color: @crust;
     background-color: @green;
@@ -175,6 +180,7 @@ button:hover {
     }
 }
 
+#custom-battery.critical:not(.charging),
 #battery.critical:not(.charging) {
     background-color: @red;
     color: @crust;

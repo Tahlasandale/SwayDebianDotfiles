@@ -76,6 +76,10 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'Voulez-vous quitter Sway ?' -B 
 bindsym Control+Shift+v exec ~/.local/bin/cliphist-tofi.sh
 bindsym $mod+Shift+v exec ~/.local/bin/cliphist-tofi.sh
 
+# Capture d'écran avec recadrage façon Windows 11 (Win + Maj + S et Print)
+bindsym $mod+Shift+s exec ~/.local/bin/screenshot-area.sh
+bindsym Print exec ~/.local/bin/screenshot-area.sh
+
 # Déplacer le focus (touches fléchées ou hjkl)
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
