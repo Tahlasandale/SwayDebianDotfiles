@@ -2,6 +2,8 @@
 # screenshot-area.sh — Capture d'écran par sélection de zone (façon Win + Maj + S)
 # Enregistre dans ~/Images/Screenshots, copie dans le presse-papier et notifie Mako.
 
+export PATH="$HOME/.local/bin:$PATH"
+
 TARGET_DIR="$HOME/Images/Screenshots"
 mkdir -p "$TARGET_DIR"
 

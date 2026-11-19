@@ -4,25 +4,31 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-# Déterminer la fenêtre active AVANT que tofi ne prenne le focus
-focused_app=$(python3 -c "
+# 1. Identifier précisément le conteneur et l'application active AVANT l'ouverture de tofi
+target_info=$(python3 -c "
 import json, subprocess
 try:
     tree = json.loads(subprocess.check_output(['swaymsg', '-t', 'get_tree']))
-    def find_focused(node):
-        if node.get('focused'):
-            return (node.get('app_id') or (node.get('window_properties') or {}).get('class') or '').lower()
-        for c in node.get('nodes', []) + node.get('floating_nodes', []):
-            res = find_focused(c)
-            if res is not None:
-                return res
-        return ''
-    print(find_focused(tree))
+    def find_focused(n):
+        if n.get('focused'):
+            return n
+        for c in n.get('nodes', []) + n.get('floating_nodes', []):
+            r = find_focused(c)
+            if r:
+                return r
+        return None
+    node = find_focused(tree)
+    if node:
+        app = (node.get('app_id') or (node.get('window_properties') or {}).get('class') or '').lower()
+        print(f'{node.get(\"id\")}|{app}')
 except Exception:
-    print('')
+    pass
 " 2>/dev/null || true)
 
-# Affichage du menu tofi
+target_id=$(printf "%s" "$target_info" | cut -d'|' -f1)
+target_app=$(printf "%s" "$target_info" | cut -d'|' -f2)
+
+# 2. Affichage du menu tofi
 selection=$(cliphist list | tofi \
     --config "$HOME/.config/tofi/config" \
     --prompt-text "📋 Presse-papier: " \
@@ -33,18 +39,25 @@ selection=$(cliphist list | tofi \
 
 [ -z "$selection" ] && exit 0
 
-# Décode et place le contenu dans le presse-papier Wayland
-printf "%s" "$selection" | cliphist decode | wl-copy
+# 3. Décode et place le contenu dans le presse-papier ET la sélection primaire
+decoded=$(printf "%s" "$selection" | cliphist decode)
+printf "%s" "$decoded" | wl-copy
+printf "%s" "$decoded" | wl-copy --primary
 
-# Petite pause pour laisser Sway redonner le focus à l'application précédente
-sleep 0.15
+# 4. Refocaliser explicitement la fenêtre qui avait le focus avant tofi
+if [ -n "$target_id" ]; then
+    swaymsg "[con_id=$target_id] focus" >/dev/null 2>&1
+fi
 
-# Simulation du collage selon le type d'application (Terminal vs GUI)
-case "$focused_app" in
-    *foot*|*terminal*|*alacritty*|*kitty*|*xterm*)
-        wtype -M ctrl -M shift -k v 2>/dev/null || true
+# Pause calibrée pour que le compositeur et le client valident le focus
+sleep 0.12
+
+# 5. Simulation du collage automatique avec modificateurs sécurisés
+case "$target_app" in
+    *foot*|*terminal*|*alacritty*|*kitty*|*xterm*|*urxvt*)
+        wtype -M ctrl -M shift -s 25 -k v -s 25 -m shift -m ctrl 2>/dev/null || true
         ;;
     *)
-        wtype -M ctrl -k v 2>/dev/null || true
+        wtype -M ctrl -s 25 -k v -s 25 -m ctrl 2>/dev/null || true
         ;;
 esac
